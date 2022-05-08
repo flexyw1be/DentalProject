@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="loginLineEdit">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -24,7 +24,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="passwordLineEdit">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -45,11 +45,12 @@
     </property>
     <property name="font">
      <font>
+      <family>Yandex Sans Text Regular</family>
       <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>Введите Логин</string>
+     <string>login</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -63,14 +64,39 @@
     </property>
     <property name="font">
      <font>
+      <family>Yandex Sans Text</family>
       <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="toolTipDuration">
      <number>-3</number>
     </property>
     <property name="text">
-     <string>Введите Пароль</string>
+     <string>password</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>200</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Yandex Sans Text</family>
+      <pointsize>24</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Enter</string>
     </property>
    </widget>
   </widget>
@@ -86,6 +112,9 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../OneDrive/Рабочий стол/test.qrc"/>
+  <include location="../../../OneDrive/Рабочий стол/123.jpg"/>
+ </resources>
  <connections/>
 </ui>

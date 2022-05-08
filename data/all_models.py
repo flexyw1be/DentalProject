@@ -2,18 +2,18 @@ import datetime
 
 from peewee import *
 
-db = SqliteDatabase('members.db')
+db = SqliteDatabase('data/database.db')
 
 
-class Member(Model):
+class LoginData(Model):
     __tablename__ = 'users'
 
     id = PrimaryKeyField(unique=True)
-    name = CharField(null=False)
-    lvl = FloatField(null=False)
-    role = CharField(null=False)
-    created_date = DateField(default=datetime.datetime.now)
+    login = CharField(null=False)
+    password = CharField(null=False)
 
     class Meta:
         database = db
-        order_by = 'lvl'
+
+
+LoginData.create_table()

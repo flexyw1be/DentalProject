@@ -3,21 +3,17 @@ import sys
 from random import randrange
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtGui import QPainter, QColor, QIcon
+from PyQt5.QtGui import QPainter, QColor
+from main import StartWidget
 
 
-class StartWidget(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        uic.loadUi('enter.ui', self)
-        self.setWindowTitle('Вход')
-        self.setWindowIcon(QIcon('deltadent1.png'))
-        # self.enterPushbutton.clicked.connect(self.enter)
-
-    def enter(self):
-        pass
-
-    def register(self):
-        pass
+def except_hook(cls, exception, traceback):
+    sys.__excepthook__(cls, exception, traceback)
 
 
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = StartWidget()
+    ex.show()
+    sys.excepthook = except_hook
+    sys.exit(app.exec())

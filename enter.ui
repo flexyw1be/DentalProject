@@ -14,63 +14,30 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="loginLabel">
+   <widget class="QPushButton" name="signUpPb">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>70</y>
-      <width>381</width>
-      <height>31</height>
+      <x>190</x>
+      <y>200</y>
+      <width>201</width>
+      <height>81</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="passwordLabel">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>140</y>
-      <width>381</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>40</y>
-      <width>381</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
     </property>
     <property name="text">
-     <string>Введите Логин</string>
+     <string>Sign Up</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QPushButton" name="signInPb">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>190</x>
       <y>110</y>
-      <width>381</width>
-      <height>31</height>
+      <width>201</width>
+      <height>81</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="toolTipDuration">
-     <number>-3</number>
-    </property>
     <property name="text">
-     <string>Введите Пароль</string>
+     <string>Sign In</string>
     </property>
    </widget>
   </widget>
