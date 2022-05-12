@@ -23,6 +23,15 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Yandex Sans Text</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLineEdit" name="passwordLineEdit">
     <property name="geometry">
@@ -32,6 +41,15 @@
       <width>381</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Yandex Sans Text</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -89,14 +107,14 @@
     <property name="font">
      <font>
       <family>Yandex Sans Text</family>
-      <pointsize>24</pointsize>
+      <pointsize>20</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
      </font>
     </property>
     <property name="text">
-     <string>Enter</string>
+     <string>Submit</string>
     </property>
    </widget>
   </widget>

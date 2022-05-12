@@ -6,10 +6,9 @@ db = SqliteDatabase('data/database.db')
 
 
 class LoginData(Model):
-    __tablename__ = 'users'
 
     id = PrimaryKeyField(unique=True)
-    login = CharField(null=False)
+    login = AnyField(null=False)
     password = CharField(null=False)
 
     class Meta:
