@@ -1,12 +1,9 @@
-import sys
-
-from random import randrange
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit
-from PyQt5.QtGui import QPainter, QColor, QIcon
+from PyQt5.QtWidgets import QMainWindow, QLineEdit
+from PyQt5.QtGui import QIcon
 from data.all_models import *
+from MainWindow import *
 
-isMain = False
 
 
 def get_without_failing(Model, query):
@@ -15,70 +12,60 @@ def get_without_failing(Model, query):
     return results[0] if len(results) > 0 else None
 
 
-class EnterWidget(QMainWindow):
+class Login(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/start.ui', self)
-        self.setWindowTitle('Sign in')
+        self.setWindowTitle('Login')
         self.setWindowIcon(QIcon('data/deltadent1.png'))
+        self.loginButton.setEnabled(False)
+        self.loginLineEdit.setPlaceholderText('Please enter your login')
+        self.passwordLineEdit.setPlaceholderText('Please enter your password')
         self.passwordLineEdit.setEchoMode(QLineEdit.Password)
-        self.pushButton.clicked.connect(self.enter)
+
+        self.loginLineEdit.textChanged.connect(self.check_input)
+        self.passwordLineEdit.textChanged.connect(self.check_input)
+
+        self.loginButton.clicked.connect(self.enter)
+        self.registerButton.clicked.connect(self.register)
+
+    def check_input(self):
+        if self.loginLineEdit.text() and self.passwordLineEdit.text():
+            self.loginButton.setEnabled(True)
+        else:
+            self.loginButton.setEnabled(False)
 
     def enter(self):
-        global isMain
         a = self.loginLineEdit.text()
         s = get_without_failing(LoginData, (LoginData.login == a))
-        print(s.password, self.passwordLineEdit.text())
-        print(s, s.password == self.passwordLineEdit.text())
+        print(s)
         if s and s.password == self.passwordLineEdit.text():
             print('Вход выполнен')
-            self.close()
-            isMain = True
-
-
-class RegisterWidget(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        uic.loadUi('ui/start.ui', self)
-        self.setWindowTitle('Sign up')
-        self.setWindowIcon(QIcon('data/deltadent1.png'))
-        self.pushButton.clicked.connect(self.register)
-        self.passwordLineEdit.setEchoMode(QLineEdit.Password)
-        if isMain:
+            self.main_window = MainWindow()
+            self.main_window.show()
             self.hide()
-            self.s = MainWidget()
-            self.s.show()
+
 
     def register(self):
-        print(1)
-        LoginData.create(login=self.loginLineEdit.text(), password=self.passwordLineEdit.text())
+        self.register_window = Register()
+        self.register_window.show()
 
 
-class StartWidget(QMainWindow):
+
+
+class Register(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/enter.ui', self)
-        self.setWindowTitle('Enter')
+        uic.loadUi('ui/register.ui', self)
+        self.setWindowTitle('Register')
         self.setWindowIcon(QIcon('data/deltadent1.png'))
-        self.signInPb.clicked.connect(self.enter)
-        self.signUpPb.clicked.connect(self.register)
 
-    def enter(self):
-        self.s = EnterWidget()
-        self.s.show()
-        print(6)
-        if isMain:
-            self.close()
-        print(isMain)
-
-    def register(self):
-        self.s = RegisterWidget()
-        self.s.show()
+        self.loginLineEdit.setPlaceholderText('Please enter login')
+        self.passwordLineEdit.setPlaceholderText('Please enter password')
+        self.passwordLineEdit_2.setPlaceholderText('Please enter password again')
 
 
-class MainWidget(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        uic.loadUi('ui/main.ui', self)
-        self.setWindowTitle('Enter')
-        self.setWindowIcon(QIcon('data/deltadent1.png'))
+
+
+
+
