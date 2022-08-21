@@ -8,7 +8,6 @@ from MainWindow import *
 
 def get_without_failing(Model, query):
     results = Model.select().where(query).limit(1)
-    print(results)
     return results[0] if len(results) > 0 else None
 
 

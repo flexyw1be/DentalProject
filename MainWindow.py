@@ -8,6 +8,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/main.ui', self)
+        # self.calendarWidget.clicked['QDate'].connect(self.show_date_func)
 
     def exit(self):
         pass
