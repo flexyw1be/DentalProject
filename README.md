@@ -2,4 +2,4 @@
 
 ## application for document management automation
 
-[![Header](https://github.com/flexyw1be/DentalProject/blob/master/data/deltadent1.png)](https://github.com/flexyw1be/DentalProject/blob/master/data/deltadent1.png)
+[![Header](https://github.com/flexyw1be/DentalProject/blob/master/data/readme.png)](https://github.com/flexyw1be/DentalProject/blob/master/data/readme.png)
