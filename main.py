@@ -1,13 +1,8 @@
-from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QLineEdit
 from PyQt5.QtGui import QIcon
 from data.all_models import *
 from MainWindow import *
-
-
-def get_without_failing(Model, query):
-    results = Model.select().where(query).limit(1)
-    return results[0] if len(results) > 0 else None
+from utitlities import get_without_failing
 
 
 class Login(QMainWindow):
@@ -15,7 +10,7 @@ class Login(QMainWindow):
         super().__init__()
         uic.loadUi('ui/start.ui', self)
         self.setWindowTitle('Login')
-        self.setWindowIcon(QIcon('data/deltadent1.png'))
+        self.setWindowIcon(QIcon(ICON))
         self.loginButton.setEnabled(False)
         self.loginLineEdit.setPlaceholderText('Please enter your login')
         self.passwordLineEdit.setPlaceholderText('Please enter your password')
@@ -43,12 +38,9 @@ class Login(QMainWindow):
             self.main_window.show()
             self.hide()
 
-
     def register(self):
         self.register_window = Register()
         self.register_window.show()
-
-
 
 
 class Register(QMainWindow):
@@ -56,14 +48,41 @@ class Register(QMainWindow):
         super().__init__()
         uic.loadUi('ui/register.ui', self)
         self.setWindowTitle('Register')
-        self.setWindowIcon(QIcon('data/deltadent1.png'))
-
+        self.setWindowIcon(QIcon(ICON))
+        self.registerButton.clicked.connect(self.main)
         self.loginLineEdit.setPlaceholderText('Please enter login')
         self.passwordLineEdit.setPlaceholderText('Please enter password')
-        self.passwordLineEdit_2.setPlaceholderText('Please enter password again')
+        self.passwordLineEdit2.setPlaceholderText('Please enter password again')
+        self.firstNameLineEdit.setPlaceholderText('Please enter first name')
+        self.lastNameLineEdit.setPlaceholderText('Please enter last name')
 
+        self.passwordLineEdit.setEchoMode(QLineEdit.Password)
+        self.passwordLineEdit2.setEchoMode(QLineEdit.Password)
 
+    def check_valid(self, login, pass1, pass2, fname, lname):
+        if not (login and pass1 and pass2 and fname and lname):
+            self.validLabel.setText('Заполните все поля')
+            return False
+        if get_without_failing(LoginData, (LoginData.login == login)):
+            self.validLabel.setText('Такой логин уже используется')
+            return False
+        if pass1 != pass2:
+            self.validLabel.setText('Пароли не совпадают')
+            return False
+        return True
 
-
-
-
+    def main(self):
+        self.validLabel.setText('')
+        login, pass1, pass2 = self.loginLineEdit.text(), self.passwordLineEdit.text(), self.passwordLineEdit2.text()
+        first_name, last_name = self.firstNameLineEdit.text().capitalize(), self.lastNameLineEdit.text().capitalize()
+        if not self.check_valid(login, pass1, pass2, first_name, last_name):
+            return
+        a = self.comboBox.currentText()
+        member = LoginData(login=login, password=pass1)
+        member.save()
+        if a == 'Администратор':
+            member = Doctor(first_name=first_name, last_name=last_name, login=login)
+        else:
+            member = Admin(first_name=first_name, last_name=last_name, login=login)
+        member.save()
+        self.hide()
