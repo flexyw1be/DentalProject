@@ -2,7 +2,7 @@ import sys
 
 
 from PyQt5.QtWidgets import QApplication
-from main import Login
+from main import Enter
 
 
 def except_hook(cls, exception, traceback):
@@ -11,7 +11,7 @@ def except_hook(cls, exception, traceback):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    main_ex = Login()
+    main_ex = Enter()
     sys.excepthook = except_hook
     main_ex.show()
     sys.exit(app.exec())

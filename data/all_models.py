@@ -15,6 +15,7 @@ class LoginData(Model):
 class Doctor(Model):
     first_name = AnyField(null=False)
     last_name = AnyField(null=False)
+    middle_name = AnyField(null=True)
     login = AnyField(null=False)
 
     class Meta:
@@ -24,6 +25,7 @@ class Doctor(Model):
 class Admin(Model):
     first_name = AnyField(null=False)
     last_name = AnyField(null=False)
+    middle_name = AnyField(null=True)
     login = AnyField(null=False)
 
     class Meta:
