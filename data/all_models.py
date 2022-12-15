@@ -25,5 +25,15 @@ class Admin(Model):
         database = db
 
 
+class LoginData(Model):
+    id = PrimaryKeyField(unique=True)
+    login = AnyField(null=False)
+    password = CharField(null=False)
+
+    class Meta:
+        database = db
+
+
 Doctor.create_table()
+LoginData.create_table()
 Admin.create_table()

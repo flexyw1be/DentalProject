@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>374</width>
-    <height>264</height>
+    <height>299</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,15 +26,15 @@
          </font>
         </property>
         <property name="text">
-         <string>password</string>
+         <string>Отчетство:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="loginLineEdit"/>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="last_name_line_edit"/>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="passwordLineEdit2"/>
+       <widget class="QLineEdit" name="middle_name_line_edit"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
@@ -45,7 +45,7 @@
          </font>
         </property>
         <property name="text">
-         <string>password</string>
+         <string>Имя:</string>
         </property>
        </widget>
       </item>
@@ -58,18 +58,15 @@
          </font>
         </property>
         <property name="text">
-         <string>login</string>
+         <string>Фамилия:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="passwordLineEdit"/>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="first_name_line_edit"/>
       </item>
       <item row="3" column="1">
-       <widget class="QLineEdit" name="firstNameLineEdit"/>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="lastNameLineEdit"/>
+       <widget class="QLineEdit" name="password_line_edit"/>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
@@ -82,26 +79,13 @@
          </font>
         </property>
         <property name="text">
-         <string>first name</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label6">
-        <property name="font">
-         <font>
-          <family>Yandex Sans Display Regular</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>last name</string>
+         <string>Пароль:</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
-    <item row="5" column="1">
+    <item row="7" column="1">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -117,10 +101,36 @@
       </property>
      </spacer>
     </item>
-    <item row="4" column="1">
-     <widget class="QPushButton" name="registerButton">
+    <item row="2" column="1">
+     <widget class="QComboBox" name="position_combo_box">
+      <property name="font">
+       <font>
+        <family>Yandex Sans Display Thin</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <item>
+       <property name="text">
+        <string>Доктор</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Администратор</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="register_push_button">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
-       <string>Register</string>
+       <string>Зарегистрироваться</string>
       </property>
      </widget>
     </item>
@@ -172,36 +182,29 @@
       </property>
      </spacer>
     </item>
-    <item row="3" column="1">
-     <widget class="QComboBox" name="comboBox">
-      <property name="font">
-       <font>
-        <family>Yandex Sans Display Thin</family>
-        <pointsize>12</pointsize>
-       </font>
+    <item row="5" column="1">
+     <spacer name="verticalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-      <item>
-       <property name="text">
-        <string>Врач</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Администратор</string>
-       </property>
-      </item>
-     </widget>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
-    <item row="2" column="1">
-     <widget class="QLabel" name="validLabel">
-      <property name="font">
-       <font>
-        <family>Yandex Sans Display Thin</family>
-        <pointsize>10</pointsize>
-       </font>
+    <item row="4" column="1">
+     <widget class="QLabel" name="valid_label">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
       </property>
       <property name="text">
        <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>

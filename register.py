@@ -2,46 +2,9 @@ from PyQt5.QtWidgets import QMainWindow, QLineEdit
 from PyQt5.QtGui import QIcon
 from data.all_models import *
 from MainWindow import *
-from utitlities import get_without_failing
 from config import *
-
-
-class Login(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        uic.loadUi('ui/start.ui', self)
-        self.setWindowTitle('Login')
-        self.setWindowIcon(QIcon(ICON))
-        self.loginButton.setEnabled(False)
-        self.loginLineEdit.setPlaceholderText('Please enter your login')
-        self.passwordLineEdit.setPlaceholderText('Please enter your password')
-        self.passwordLineEdit.setEchoMode(QLineEdit.Password)
-
-        self.loginLineEdit.textChanged.connect(self.check_input)
-        self.passwordLineEdit.textChanged.connect(self.check_input)
-
-        self.loginButton.clicked.connect(self.enter)
-        self.registerButton.clicked.connect(self.register)
-
-    def check_input(self):
-        if self.loginLineEdit.text() and self.passwordLineEdit.text():
-            self.loginButton.setEnabled(True)
-        else:
-            self.loginButton.setEnabled(False)
-
-    def enter(self):
-        a = self.loginLineEdit.text()
-        s = get_without_failing(LoginData, (LoginData.login == a))
-        print(s)
-        if s and s.password == self.passwordLineEdit.text():
-            print('Вход выполнен')
-            self.main_window = MainWindow()
-            self.main_window.show()
-            self.hide()
-
-    def register(self):
-        self.register_window = Register()
-        self.register_window.show()
+import sys
+from PyQt5.QtWidgets import QApplication
 
 
 class Register(QMainWindow):
@@ -50,41 +13,36 @@ class Register(QMainWindow):
         uic.loadUi('ui/register.ui', self)
         self.setWindowTitle('Register')
         self.setWindowIcon(QIcon(ICON))
-        self.registerButton.clicked.connect(self.main)
-        self.loginLineEdit.setPlaceholderText('Please enter login')
-        self.passwordLineEdit.setPlaceholderText('Please enter password')
-        self.passwordLineEdit2.setPlaceholderText('Please enter password again')
-        self.firstNameLineEdit.setPlaceholderText('Please enter first name')
-        self.lastNameLineEdit.setPlaceholderText('Please enter last name')
 
-        self.passwordLineEdit.setEchoMode(QLineEdit.Password)
-        self.passwordLineEdit2.setEchoMode(QLineEdit.Password)
+        # подсказки полей ввода и шифрование пароля
+        self.password_line_edit.setPlaceholderText('Введите пароль')
+        self.password_line_edit.setEchoMode(QLineEdit.Password)
+        self.last_name_line_edit.setPlaceholderText('Введите имя')
+        self.first_name_line_edit.setPlaceholderText('Введите фамилию')
+        self.middle_name_line_edit.setPlaceholderText('Введите отчетство')
 
-    def check_valid(self, login, pass1, pass2, fname, lname):
-        if not (login and pass1 and pass2 and fname and lname):
-            self.validLabel.setText('Заполните все поля')
-            return False
-        if get_without_failing(LoginData, (LoginData.login == login)):
-            self.validLabel.setText('Такой логин уже используется')
-            return False
-        if pass1 != pass2:
-            self.validLabel.setText('Пароли не совпадают')
-            return False
-        return True
+        # подключение кнопок к методам класса
+        self.register_push_button.clicked.connect(self.register)
 
-    def main(self):
-        self.validLabel.setText('')
-        login, pass1, pass2 = self.loginLineEdit.text(), self.passwordLineEdit.text(), self.passwordLineEdit2.text()
-        first_name, last_name = self.firstNameLineEdit.text().capitalize(), self.lastNameLineEdit.text().capitalize()
-        if not self.check_valid(login, pass1, pass2, first_name, last_name):
-            return
-        a = self.comboBox.currentText()
-        member = LoginData(login=login, password=pass1)
-        member.save()
-        if a == 'Администратор':
-            member = Doctor(first_name=first_name, last_name=last_name, login=login)
+    def get_position(self):
+        return self.position_combo_box.currentText()
+
+    def register(self):
+        model = DATABESES_KEYS[self.get_position()]
+        if self.password_line_edit.text() and self.first_name_line_edit.text() and self.last_name_line_edit.text() \
+                and self.middle_name_line_edit.text():
+            current_name = f"{self.last_name_line_edit.text()} {self.first_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
+            model.create(last_name=self.last_name_line_edit.text(), first_name=self.first_name_line_edit.text(),
+                         middle_name=self.middle_name_line_edit.text(), current_name=current_name,
+                         password=self.password_line_edit.text())
         else:
-            member = Admin(first_name=first_name, last_name=last_name, login=login)
-        member.save()
-        self.hide()
+            self.valid_label.setText('Заполните все поля')
+
+
 #
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    main_ex = Register()
+    sys.excepthook = except_hook
+    main_ex.show()
+    sys.exit(app.exec())
