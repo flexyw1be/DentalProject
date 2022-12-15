@@ -1,4 +1,5 @@
 from PyQt5 import uic
+from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QIcon
 from data.all_models import *
@@ -6,13 +7,22 @@ from config import *
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
         uic.loadUi('ui/main.ui', self)
         self.setWindowIcon(QIcon(ICON))
+        self.user_name = name
+        print(self.user_name)
         self.setWindowTitle('DentalProject')
         self.firstTimeComboBox.addItems([f'{x}:00' for x in range(START_TIME, FINISH_TIME)])
         self.firstTimeComboBox.activated[str].connect(self.onActivated)
+
+        self.card_push_button.setStyleSheet("QPushButton"
+                                            "{"
+                                            "qproperty-icon: url(data/123.jfif);"
+                                        
+                                            "}")
+        self.card_push_button.setIconSize(QSize(65, 65))
 
     def exit(self):
         pass

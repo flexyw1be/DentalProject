@@ -42,7 +42,7 @@
      </font>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="card_push_button">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -52,7 +52,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">

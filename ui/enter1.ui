@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>admin_push_back</class>
- <widget class="QMainWindow" name="admin_push_back">
+ <class>admin_push_button_2</class>
+ <widget class="QMainWindow" name="admin_push_button_2">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -24,6 +24,26 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
+     <item row="2" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Пользователь</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="users_combo_box"/>
+       </item>
+      </layout>
+     </item>
      <item row="0" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
@@ -54,26 +74,6 @@
        </item>
       </layout>
      </item>
-     <item row="2" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="font">
-          <font>
-           <family>Segoe UI</family>
-           <pointsize>11</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Пользователь</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="users_combo_box"/>
-       </item>
-      </layout>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="user_label">
        <property name="font">
@@ -84,6 +84,19 @@
        </property>
        <property name="text">
         <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QPushButton" name="enter_push_button">
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Войти</string>
        </property>
       </widget>
      </item>
