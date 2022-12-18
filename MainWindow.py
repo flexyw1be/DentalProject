@@ -27,6 +27,7 @@ class MainWindow(QMainWindow):
         self.card_push_button.setIconSize(QSize(65, 65))
         self.card_push_button.clicked.connect(self.show_card)
         self.shedule_push_button.clicked.connect(self.show_schedule)
+        self.name_label.setText(self.user_name)
 
     def exit(self):
         pass
