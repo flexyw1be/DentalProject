@@ -20,7 +20,7 @@ class Enter(QMainWindow):
 
         self.admin_push_button.setStyleSheet("QPushButton"
                                              "{"
-                                             "background-color : lightgreen;"
+                                             "background-color : lightgrey;"
                                              "}")
 
         # объявление переменных
@@ -30,7 +30,7 @@ class Enter(QMainWindow):
     def set_admin_user(self):
         self.admin_push_button.setStyleSheet("QPushButton"
                                              "{"
-                                             "background-color : lightgreen;"
+                                             "background-color : lightgrey;"
                                              "}")
         self.doctor_push_button.setStyleSheet("QPushButton"
                                               "{"
@@ -42,7 +42,7 @@ class Enter(QMainWindow):
     def set_doctor_user(self):
         self.doctor_push_button.setStyleSheet("QPushButton"
                                               "{"
-                                              "background-color : lightgreen;"
+                                              "background-color : lightgrey;"
                                               "}")
         self.admin_push_button.setStyleSheet("QPushButton"
                                              "{"

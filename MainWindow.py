@@ -15,13 +15,13 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(ICON))
         self.user_name = name
         print(self.user_name)
-        self.setWindowTitle('DentalProject')
+        self.setWindowTitle('Главная')
         self.firstTimeComboBox.addItems([f'{x}:00' for x in range(START_TIME, FINISH_TIME)])
         self.firstTimeComboBox.activated[str].connect(self.onActivated)
 
         self.card_push_button.setStyleSheet("QPushButton"
                                             "{"
-                                            "qproperty-icon: url(data/123.jfif);"
+                                            "qproperty-icon: url(data/medicalCard.png);"
 
                                             "}")
         self.card_push_button.setIconSize(QSize(65, 65))
