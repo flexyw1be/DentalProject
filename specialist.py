@@ -6,9 +6,9 @@ from utitlities import *
 from config import *
 
 
-class MedicalCard(QMainWindow):
+class Specialist(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(MEDICAL_CARD_UI, self)
-        self.setWindowTitle('Медицинская Карта')
+        uic.loadUi(SPECIALIST_UI, self)
+        self.setWindowTitle('Пользователь')
         self.setWindowIcon(QIcon(ICON))

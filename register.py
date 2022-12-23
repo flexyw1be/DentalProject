@@ -1,16 +1,17 @@
 from PyQt5.QtWidgets import QMainWindow, QLineEdit
 from PyQt5.QtGui import QIcon
+from PyQt5 import uic
 from data.all_models import *
-from MainWindow import *
 from config import *
 import sys
 from PyQt5.QtWidgets import QApplication
+from utitlities import *
 
 
 class Register(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/register.ui', self)
+        uic.loadUi(REGISTER_UI, self)
         self.setWindowTitle('Register')
         self.setWindowIcon(QIcon(ICON))
 

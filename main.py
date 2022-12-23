@@ -1,15 +1,16 @@
-from PyQt5.QtWidgets import QMainWindow, QLineEdit
+from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QIcon
 from data.all_models import *
-from MainWindow import *
-from utitlities import get_without_failing
+from main_window import MainWindow
+from PyQt5 import uic
+from utitlities import *
 from config import *
 
 
 class Enter(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/enter1.ui', self)
+        uic.loadUi(ENTER_UI, self)
         self.setWindowTitle('Авторизация')
         self.setWindowIcon(QIcon(ICON))
 
@@ -17,6 +18,12 @@ class Enter(QMainWindow):
         self.admin_push_button.clicked.connect(self.set_admin_user)
         self.doctor_push_button.clicked.connect(self.set_doctor_user)
         self.enter_push_button.clicked.connect(self.enter)
+        self.exit_push_button.clicked.connect(self.exit)
+
+        self.exit_push_button.setStyleSheet("QPushButton"
+                                            "{"
+                                            "background-color : lightgrey;"
+                                            "}")
 
         self.admin_push_button.setStyleSheet("QPushButton"
                                              "{"
@@ -61,3 +68,5 @@ class Enter(QMainWindow):
         self.main_window.show()
         self.hide()
 
+    def exit(self):
+        quit()

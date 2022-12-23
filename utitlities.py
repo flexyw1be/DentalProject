@@ -1,8 +1,8 @@
 import sys
 
 
-def get_without_failing(Model, query):
-    results = Model.select().where(query)
+def get_without_failing(model, query):
+    results = model.select().where(query)
     return results if len(results) > 0 else None
 
 
