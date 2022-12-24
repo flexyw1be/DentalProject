@@ -7,8 +7,13 @@ from config import *
 
 
 class MedicalCard(QMainWindow):
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
         uic.loadUi(MEDICAL_CARD_UI, self)
         self.setWindowTitle('Медицинская Карта')
         self.setWindowIcon(QIcon(ICON))
+        self.name = name
+
+        member = Patient.get(Patient.current_name == self.name)
+        self.name_label.setText(f'{member.last_name} {member.first_name} {member.middle_name}')
+        self.date_label.setText(member.age)

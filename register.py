@@ -32,7 +32,7 @@ class Register(QMainWindow):
         model = DATABESES_KEYS[self.get_position()]
         if self.password_line_edit.text() and self.first_name_line_edit.text() and self.last_name_line_edit.text() \
                 and self.middle_name_line_edit.text():
-            current_name = f"{self.last_name_line_edit.text()} {self.first_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
+            current_name = f"{self.first_name_line_edit.text()} {self.last_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
             model.create(last_name=self.last_name_line_edit.text(), first_name=self.first_name_line_edit.text(),
                          middle_name=self.middle_name_line_edit.text(), current_name=current_name,
                          password=self.password_line_edit.text())

@@ -13,15 +13,19 @@ from utitlities import *
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, name):
+    def __init__(self, name, permission):
         super().__init__()
         uic.loadUi(MAIN_UI, self)
         self.setWindowIcon(QIcon(ICON))
         self.user_name = name
+        self.permission = permission
+        if self.permission == DOCTORS:
+            self.shedule_push_button.hide()
         print(self.user_name)
         self.setWindowTitle('Главная')
         self.firstTimeComboBox.addItems([f'{x}:00' for x in range(START_TIME, FINISH_TIME)])
         self.firstTimeComboBox.activated[str].connect(self.onActivated)
+        self.tableWidget.cellClicked.connect(self.get_selected_cell_value)
 
         self.card_push_button.setStyleSheet("QPushButton"
                                             "{"
@@ -72,7 +76,7 @@ class MainWindow(QMainWindow):
         self.lastTimeComboBox.addItems([f'{x}:00' for x in range(n, FINISH_TIME + 1)])
 
     def show_card(self):
-        self.card = MedicalCard()
+        self.card = MedicalCard(self.get_selected_cell_value())
         self.card.show()
 
     def show_schedule(self):
@@ -115,3 +119,8 @@ class MainWindow(QMainWindow):
     def set_patients_table(self):
         # Написать чтобы выбирала пациентов из основной таблицы
         pass
+
+    def get_selected_cell_value(self):
+        current_row = self.tableWidget.currentRow()
+        current_column = 0
+        return self.tableWidget.item(current_row, current_column).text()

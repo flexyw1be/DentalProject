@@ -64,7 +64,7 @@ class Enter(QMainWindow):
         self.users_combo_box.addItems(self.user_names)
 
     def enter(self):
-        self.main_window = MainWindow(self.users_combo_box.currentText())
+        self.main_window = MainWindow(self.users_combo_box.currentText(), self.user_names)
         self.main_window.show()
         self.hide()
 

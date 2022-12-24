@@ -13,6 +13,7 @@ MAIN_UI = 'ui/main.ui'
 MEDICAL_CARD_UI = 'ui/medicalCard.ui'
 
 ICON = 'data/icon.png'
+number = AnyField(null=False)
 
 DOCTORS = [i.current_name for i in get_without_failing(Doctor, Doctor.id)]
 ADMINS = [i.current_name for i in get_without_failing(Admin, Admin.id)]
