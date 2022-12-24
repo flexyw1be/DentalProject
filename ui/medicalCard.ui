@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1033</width>
-    <height>829</height>
+    <width>776</width>
+    <height>308</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>0</y>
+      <x>20</x>
+      <y>10</y>
       <width>751</width>
       <height>291</height>
      </rect>
@@ -76,6 +76,36 @@
          </item>
         </layout>
        </item>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>ФИО:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="name_label">
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item row="2" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
@@ -106,10 +136,10 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout">
+       <item row="3" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="label_5">
            <property name="font">
             <font>
              <family>Segoe UI</family>
@@ -117,12 +147,12 @@
             </font>
            </property>
            <property name="text">
-            <string>ФИО:</string>
+            <string>Адрес:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="name_label">
+          <widget class="QLabel" name="address_label">
            <property name="font">
             <font>
              <family>Segoe UI</family>

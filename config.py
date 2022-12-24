@@ -6,7 +6,7 @@ FINISH_TIME = 19
 
 ENTER_UI = 'ui/enter.ui'
 REGISTER_UI = 'ui/register.ui'
-SPECIALIST_UI = 'ui/medicalCard.ui'
+SPECIALIST_UI = 'ui/specialist.ui'
 SCHEDULE_UI = 'ui/schedule.ui'
 
 MAIN_UI = 'ui/main.ui'

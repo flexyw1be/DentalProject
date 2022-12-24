@@ -16,4 +16,6 @@ class MedicalCard(QMainWindow):
 
         member = Patient.get(Patient.current_name == self.name)
         self.name_label.setText(f'{member.last_name} {member.first_name} {member.middle_name}')
-        self.date_label.setText(member.age)
+        self.date_label.setText(member.date)
+        self.address_label.setText(member.address)
+        self.number_label.setText(str(member.number))
