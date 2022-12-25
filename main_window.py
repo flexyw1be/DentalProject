@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
         self.schedule.show()
 
     def show_specialist(self):
-        self.specialist = Specialist()
+        self.specialist = Specialist(self.user_name)
         self.specialist.show()
 
     def set_ring_patients(self):
