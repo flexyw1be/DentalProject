@@ -10,6 +10,9 @@ class Doctor(Model):
     middle_name = AnyField(null=True)
     current_name = AnyField(null=False)
     password = AnyField(null=False)
+    address = AnyField(null=False)
+    number = AnyField(null=False)
+    date = AnyField(null=False)
 
     class Meta:
         database = db
