@@ -15,6 +15,9 @@ class Specialist(QMainWindow):
         self.name = name
         member = Doctor.get(Doctor.current_name == self.name)
         self.name_label.setText(f'{member.last_name} {member.first_name} {member.middle_name}')
+        self.date_label.setText(member.date)
+        self.number_label.setText(f'{member.number}')
+        self.adress_label.setText(member.address)
         # self.date_label.setText(member.date)
         # self.address_label.setText(member.address)
         # self.number_label.setText(str(member.number))

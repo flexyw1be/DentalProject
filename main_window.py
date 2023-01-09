@@ -22,6 +22,9 @@ class MainWindow(QMainWindow):
         if self.permission == DOCTORS:
             self.shedule_push_button.hide()
         print(self.user_name)
+        if self.permission == DOCTORS:
+            self.label_4.hide()
+            self.doctor_combo_box.hide()
         self.setWindowTitle('Главная')
         self.firstTimeComboBox.addItems([f'{x}:00' for x in range(START_TIME, FINISH_TIME)])
         self.firstTimeComboBox.activated[str].connect(self.onActivated)
@@ -62,6 +65,7 @@ class MainWindow(QMainWindow):
                                               "background-color : white;"
                                               "}"
                                               )
+
         self.table_sort = 'canceled_appointments'
 
     def exit(self):
@@ -100,6 +104,8 @@ class MainWindow(QMainWindow):
         # self.ring_push_button.resize(176, 28)
         # self.cancel_push_button.resize(176, 28)
         self.table_sort = 'canceled_appointments'
+        self.lose_push_button.show()
+        self.accept_push_button.show()
 
     def set_canceled_appointments(self):
         self.ring_push_button.setStyleSheet("QPushButton"
@@ -111,10 +117,13 @@ class MainWindow(QMainWindow):
                                               "background-color : lightgrey;"
                                               "}"
                                               )
+
         # print(1)
         # self.ring_push_button.resize(176, 28)
         # self.cancel_push_button.resize(176, 28)
         self.table_sort = 'ring_patients'
+        self.lose_push_button.hide()
+        self.accept_push_button.hide()
 
     def set_patients_table(self):
         # Написать чтобы выбирала пациентов из основной таблицы

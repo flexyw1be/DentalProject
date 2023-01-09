@@ -85,6 +85,7 @@ class Note(Model):
     Patient_id = AnyField(null=False)
     Doctor_id = AnyField(null=False)
     date = DateTimeField(null=False)
+    time = DateTimeField(null=False)
 
     class Meta:
         database = db
