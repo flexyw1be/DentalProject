@@ -3,7 +3,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QIcon
-from datetime import datetime
+from datetime import datetime, time
 from data.all_models import *
 from config import *
 from medicalCard import MedicalCard
@@ -26,9 +26,11 @@ class MainWindow(QMainWindow):
             self.label_4.hide()
             self.doctor_combo_box.hide()
         self.setWindowTitle('Главная')
-        self.firstTimeComboBox.addItems([f'{x}:00' for x in range(START_TIME, FINISH_TIME)])
-        self.firstTimeComboBox.activated[str].connect(self.onActivated)
         self.tableWidget.cellClicked.connect(self.get_selected_cell_value)
+
+        doctors = [i.current_name for i in get_without_failing(Doctor, (Doctor.id > 0))]
+        self.doctor_combo_box.addItems(doctors)
+        print(self.doctor_combo_box.currentText())
 
         self.card_push_button.setStyleSheet("QPushButton"
                                             "{"
@@ -67,6 +69,8 @@ class MainWindow(QMainWindow):
                                               )
 
         self.table_sort = 'canceled_appointments'
+
+        self.add_note_push_button.clicked.connect(self.add_note)
 
     def exit(self):
         quit()
@@ -133,3 +137,36 @@ class MainWindow(QMainWindow):
         current_row = self.tableWidget.currentRow()
         current_column = 0
         return self.tableWidget.item(current_row, current_column).text()
+
+    def add_note(self):
+        start_time = time(*list(map(int, self.start_time_edit.text().split(':'))))
+        finish_time = time(*list(map(int, self.finish_time_edit.text().split(':'))))
+        current_name = f"{self.first_name_line_edit.text()} {self.last_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
+        date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
+        date = datetime(day=date[0], month=date[1], year=date[2])
+        doctor = Doctor.get(Doctor.current_name == self.doctor_combo_box.currentText())
+        # doctor = get_without_failing(Doctor, (Doctor.current_name == self.doctor_combo_box.currentText()))
+
+        if Patient.table_exists():
+            member = Patient.create(last_name=self.last_name_line_edit.text(),
+                                    first_name=self.first_name_line_edit.text(),
+                                    middle_name=self.middle_name_line_edit.text(), current_name=current_name)
+            member.save()
+            note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,
+                               finish_time=finish_time)
+            note.save()
+
+        else:
+            request = get_without_failing(Patient, (Patient.current_name == current_name))
+            if not request:
+                member = Patient.create(last_name=self.last_name_line_edit.text(),
+                                        first_name=self.first_name_line_edit.text(),
+                                        middle_name=self.middle_name_line_edit.text(), current_name=current_name,
+                                        date=date, start_time=start_time, finish_time=finish_time)
+                member.save()
+                note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,
+                                   finish_time=finish_time)
+                note.save()
+        notes = get_without_failing(Note, (Note.id > 0))
+        for i in notes:
+            print(i.current_name)

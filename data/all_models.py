@@ -45,9 +45,8 @@ class Patient(Model):
     first_name = AnyField(null=False)
     middle_name = AnyField(null=True)
     current_name = AnyField(null=False)
-    address = AnyField(null=False)
-    number = AnyField(null=False)
-    date = AnyField(null=False)
+    address = AnyField(null=True)
+    number = AnyField(null=True)
 
     class Meta:
         database = db
@@ -84,8 +83,9 @@ class Note(Model):
     id = PrimaryKeyField(unique=True)
     Patient_id = AnyField(null=False)
     Doctor_id = AnyField(null=False)
-    date = DateTimeField(null=False)
-    time = DateTimeField(null=False)
+    date = DateField(null=True)
+    start_time = TimeField(null=True)
+    finish_time = TimeField(null=True)
 
     class Meta:
         database = db
