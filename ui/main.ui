@@ -53,7 +53,7 @@
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="1" column="0">
-      <widget class="QTableWidget" name="tableWidget">
+      <widget class="QTableWidget" name="table_widget">
        <property name="font">
         <font>
          <pointsize>11</pointsize>
@@ -63,14 +63,24 @@
         <number>0</number>
        </property>
        <property name="columnCount">
-        <number>2</number>
+        <number>4</number>
        </property>
        <attribute name="horizontalHeaderDefaultSectionSize">
         <number>230</number>
        </attribute>
        <column>
         <property name="text">
-         <string>Имя</string>
+         <string>Дата</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Время</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Пациент</string>
         </property>
        </column>
        <column>

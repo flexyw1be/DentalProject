@@ -1,7 +1,7 @@
 import peewee
 from PyQt5 import uic
 from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from PyQt5.QtGui import QIcon
 from datetime import datetime, time
 from data.all_models import *
@@ -26,7 +26,7 @@ class MainWindow(QMainWindow):
             self.label_4.hide()
             self.doctor_combo_box.hide()
         self.setWindowTitle('Главная')
-        self.tableWidget.cellClicked.connect(self.get_selected_cell_value)
+        self.table_widget.cellClicked.connect(self.get_selected_cell_value)
 
         doctors = [i.current_name for i in get_without_failing(Doctor, (Doctor.id > 0))]
         self.doctor_combo_box.addItems(doctors)
@@ -71,6 +71,8 @@ class MainWindow(QMainWindow):
         self.table_sort = 'canceled_appointments'
 
         self.add_note_push_button.clicked.connect(self.add_note)
+
+        self.calendar_widget.clicked.connect(self.show_notes)
 
     def exit(self):
         quit()
@@ -122,30 +124,23 @@ class MainWindow(QMainWindow):
                                               "}"
                                               )
 
-        # print(1)
-        # self.ring_push_button.resize(176, 28)
-        # self.cancel_push_button.resize(176, 28)
         self.table_sort = 'ring_patients'
         self.lose_push_button.hide()
         self.accept_push_button.hide()
 
-    def set_patients_table(self):
-        # Написать чтобы выбирала пациентов из основной таблицы
-        pass
-
     def get_selected_cell_value(self):
-        current_row = self.tableWidget.currentRow()
+        current_row = self.table_widget.currentRow()
         current_column = 0
         return self.tableWidget.item(current_row, current_column).text()
 
     def add_note(self):
-        start_time = time(*list(map(int, self.start_time_edit.text().split(':'))))
-        finish_time = time(*list(map(int, self.finish_time_edit.text().split(':'))))
         current_name = f"{self.first_name_line_edit.text()} {self.last_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
         date = datetime(day=date[0], month=date[1], year=date[2])
         doctor = Doctor.get(Doctor.current_name == self.doctor_combo_box.currentText())
-        # doctor = get_without_failing(Doctor, (Doctor.current_name == self.doctor_combo_box.currentText()))
+
+        start_time = time(*list(map(int, self.start_time_edit.text().split(':'))))
+        finish_time = time(*list(map(int, self.finish_time_edit.text().split(':'))))
 
         if Patient.table_exists():
             member = Patient.create(last_name=self.last_name_line_edit.text(),
@@ -167,6 +162,34 @@ class MainWindow(QMainWindow):
                 note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,
                                    finish_time=finish_time)
                 note.save()
-        notes = get_without_failing(Note, (Note.id > 0))
-        for i in notes:
-            print(i.current_name)
+
+    def show_notes(self):
+        list_of_notes = self.get_notes()
+        self.table_widget.setRowCount(len(list_of_notes))
+        if list_of_notes:
+            # start_time = list(map(int, list_of_notes[-1]['Время окончания'].split(":")))
+            start_time = time(*list(map(int, list_of_notes[-1]['Время окончания'].split(":"))))
+            self.start_time_edit.setMinimumTime(start_time)
+            self.finish_time_edit.setMinimumTime(start_time)
+        for n, i in enumerate(list_of_notes):
+            print(i)
+            self.table_widget.setItem(n, 0, QTableWidgetItem(i['Дата']))
+            self.table_widget.setItem(n, 1, QTableWidgetItem(i['Время']))
+            self.table_widget.setItem(n, 2, QTableWidgetItem(i['Пациент']))
+            self.table_widget.setItem(n, 3, QTableWidgetItem(i['Врач']))
+
+    def get_notes(self):
+        date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
+        date = datetime(day=date[0], month=date[1], year=date[2])
+        notes = get_without_failing(Note, (Note.date == date))
+        list_of_notes = []
+        if notes:
+            for i in notes:
+                member = Patient.get(Patient.id == i.Patient_id)
+                doctor = Doctor.get(Doctor.id == i.Doctor_id)
+                list_of_notes.append(
+                    {'Дата': date.strftime('%d:%m:%y'), 'Время': i.start_time.strftime('%H:%M'),
+                     'Пациент': member.current_name, 'Врач': doctor.current_name,
+                     'Время окончания': i.finish_time.strftime('%H:%M'), })
+        list_of_notes.sort(key=lambda x: x['Дата'])
+        return list_of_notes
