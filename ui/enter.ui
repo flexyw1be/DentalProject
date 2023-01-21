@@ -20,7 +20,7 @@
       <x>30</x>
       <y>30</y>
       <width>251</width>
-      <height>182</height>
+      <height>188</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -129,7 +129,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="password_line_edit"/>
+        <widget class="QLineEdit" name="password_line_edit">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

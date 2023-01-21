@@ -47,6 +47,7 @@ class Patient(Model):
     current_name = AnyField(null=False)
     address = AnyField(null=True)
     number = AnyField(null=True)
+    date = AnyField(null=True)
 
     class Meta:
         database = db

@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
         self.shedule_push_button.clicked.connect(self.show_schedule)
         self.name_label.setText(self.user_name)
 
-        self.cancel_push_button.clicked.connect(self.set_canceled_appointments)
+        self.cancel_notes_push_button.clicked.connect(self.set_canceled_appointments)
         self.ring_push_button.clicked.connect(self.set_ring_patients)
 
         self.ring_push_button.setStyleSheet("QPushButton"
@@ -74,7 +74,9 @@ class MainWindow(QMainWindow):
 
         self.calendar_widget.clicked.connect(self.show_notes)
 
-        self.cancel_push_button.clicked.connect(self.delete_note)
+        self.cancel_notes_push_button.clicked.connect(self.delete_note)
+
+        self.show_notes()
 
     def exit(self):
         quit()
@@ -88,7 +90,8 @@ class MainWindow(QMainWindow):
         self.lastTimeComboBox.addItems([f'{x}:00' for x in range(n, FINISH_TIME + 1)])
 
     def show_card(self):
-        self.card = MedicalCard(self.get_selected_cell_value())
+        print(self.get_selected_cell_value()[1])
+        self.card = MedicalCard(self.get_selected_cell_value()[1])
         self.card.show()
 
     def show_schedule(self):
@@ -104,7 +107,7 @@ class MainWindow(QMainWindow):
                                             "{"
                                             "background-color : lightgrey;"
                                             "}")
-        self.cancel_push_button.setStyleSheet("QPushButton"
+        self.cancel_notes_push_button.setStyleSheet("QPushButton"
                                               "{"
                                               "background-color : white;"
                                               "}"
@@ -120,7 +123,7 @@ class MainWindow(QMainWindow):
                                             "{"
                                             "background-color : white;"
                                             "}")
-        self.cancel_push_button.setStyleSheet("QPushButton"
+        self.cancel_notes_push_button.setStyleSheet("QPushButton"
                                               "{"
                                               "background-color : lightgrey;"
                                               "}"
@@ -133,40 +136,33 @@ class MainWindow(QMainWindow):
     def get_selected_cell_value(self):
         current_row = self.table_widget.currentRow()
         current_column = 0
-        return self.table_widget.item(current_row, current_column).text(), self.table_widget.item(current_row, 2).text()
+        return self.table_widget.item(current_row, current_column).text(), self.table_widget.item(current_row, 1).text()
 
     def get_row(self):
         return self.table_widget.currentRow()
 
     def add_note(self):
-        current_name = f"{self.first_name_line_edit.text()} {self.last_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
+        current_name = f"{self.last_name_line_edit.text()} {self.first_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
         date = datetime(day=date[0], month=date[1], year=date[2])
+        number = self.number_line_edit.text()
         doctor = Doctor.get(Doctor.current_name == self.doctor_combo_box.currentText())
 
         start_time = time(*list(map(int, self.start_time_edit.text().split(':'))))
         finish_time = time(*list(map(int, self.finish_time_edit.text().split(':'))))
 
-        if Patient.table_exists():
+        requset = Patient.get(Patient.current_name == current_name)
+        if not requset:
             member = Patient.create(last_name=self.last_name_line_edit.text(),
-                                    first_name=self.first_name_line_edit.text(),
-                                    middle_name=self.middle_name_line_edit.text(), current_name=current_name)
+                                first_name=self.first_name_line_edit.text(),
+                                middle_name=self.middle_name_line_edit.text(), current_name=current_name,
+                                date=date, start_time=start_time, finish_time=finish_time)
             member.save()
-            note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,
-                               finish_time=finish_time)
-            note.save()
-
-        else:
-            request = get_without_failing(Patient, (Patient.current_name == current_name))
-            if not request:
-                member = Patient.create(last_name=self.last_name_line_edit.text(),
-                                        first_name=self.first_name_line_edit.text(),
-                                        middle_name=self.middle_name_line_edit.text(), current_name=current_name,
-                                        date=date, start_time=start_time, finish_time=finish_time)
-                member.save()
-                note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,
-                                   finish_time=finish_time)
-                note.save()
+        member = Patient.get(Patient.current_name == current_name)
+        note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,
+                           finish_time=finish_time)
+        note.save()
+        self.show_notes()
 
     def show_notes(self):
         list_of_notes = self.get_notes()
@@ -181,10 +177,9 @@ class MainWindow(QMainWindow):
             self.finish_time_edit.setMinimumTime(time(8, 0))
         for n, i in enumerate(list_of_notes):
             print(i)
-            self.table_widget.setItem(n, 0, QTableWidgetItem(i['Дата']))
-            self.table_widget.setItem(n, 1, QTableWidgetItem(i['Время']))
-            self.table_widget.setItem(n, 2, QTableWidgetItem(i['Пациент']))
-            self.table_widget.setItem(n, 3, QTableWidgetItem(i['Врач']))
+            self.table_widget.setItem(n, 0, QTableWidgetItem(i['Время']))
+            self.table_widget.setItem(n, 1, QTableWidgetItem(i['Пациент']))
+            self.table_widget.setItem(n, 2, QTableWidgetItem(i['Врач']))
 
     def get_notes(self):
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
@@ -206,7 +201,7 @@ class MainWindow(QMainWindow):
         row = self.get_row()
         date, name = self.get_selected_cell_value()
         print(date, name)
-        patient = Patient.get(Patient.current_name==name)
+        patient = Patient.get(Patient.current_name == name)
         note = Note.delete().where(Note.date == date and Note.Patient_id == patient.id)
         note.execute()
         # self.table_widget.removeRow(row)
