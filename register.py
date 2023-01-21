@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QLineEdit
 from PyQt5.QtGui import QIcon
 from PyQt5 import uic
 from data.all_models import *
-from config import *
+from data.config import *
 import sys
 from PyQt5.QtWidgets import QApplication
 from utitlities import *

@@ -3,7 +3,7 @@ from PyQt5.QtGui import QIcon
 from data.all_models import *
 from PyQt5 import uic
 from utitlities import *
-from config import *
+from data.config import *
 
 
 class MedicalCard(QMainWindow):

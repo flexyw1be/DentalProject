@@ -30,13 +30,13 @@ class Admin(Model):
         database = db
 
 
-class LoginData(Model):
-    id = PrimaryKeyField(unique=True)
-    login = AnyField(null=False)
-    password = CharField(null=False)
-
-    class Meta:
-        database = db
+# class LoginData(Model):
+#     id = PrimaryKeyField(unique=True)
+#     login = AnyField(null=False)
+#     password = CharField(null=False)
+#
+#     class Meta:
+#         database = db
 
 
 class Patient(Model):
@@ -54,7 +54,6 @@ class Patient(Model):
 
 class Price(Model):
     id = PrimaryKeyField(unique=True)
-    article = AnyField(null=False)
     price = IntegerField(null=False)
 
     class Meta:
@@ -92,7 +91,7 @@ class Note(Model):
 
 
 Doctor.create_table()
-LoginData.create_table()
+# LoginData.create_table()
 Admin.create_table()
 Patient.create_table()
 Price.create_table()

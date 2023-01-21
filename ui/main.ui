@@ -371,7 +371,7 @@ alternate-background-color: rgb(208, 208, 208)</string>
      <item row="1" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QPushButton" name="cancel_push_button">
+        <widget class="QPushButton" name="cancel_notes_push_button">
          <property name="font">
           <font>
            <family>Segoe UI</family>
@@ -663,6 +663,25 @@ alternate-background-color: rgb(208, 208, 208)</string>
       <minute>0</minute>
       <second>0</second>
      </time>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="cancel_push_button">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>780</y>
+      <width>91</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Отменить</string>
     </property>
    </widget>
   </widget>

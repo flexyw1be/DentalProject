@@ -3,7 +3,7 @@ from PyQt5.QtGui import QIcon
 from data.all_models import *
 from PyQt5 import uic
 from utitlities import get_without_failing
-from config import *
+from data.config import *
 
 
 class Schedule(QMainWindow):

@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from PyQt5.QtGui import QIcon
 from datetime import datetime, time
 from data.all_models import *
-from config import *
+from data.config import *
 from medicalCard import MedicalCard
 from schedule import Schedule
 from specialist import Specialist
@@ -74,6 +74,8 @@ class MainWindow(QMainWindow):
 
         self.calendar_widget.clicked.connect(self.show_notes)
 
+        self.cancel_push_button.clicked.connect(self.delete_note)
+
     def exit(self):
         quit()
 
@@ -131,7 +133,10 @@ class MainWindow(QMainWindow):
     def get_selected_cell_value(self):
         current_row = self.table_widget.currentRow()
         current_column = 0
-        return self.tableWidget.item(current_row, current_column).text()
+        return self.table_widget.item(current_row, current_column).text(), self.table_widget.item(current_row, 2).text()
+
+    def get_row(self):
+        return self.table_widget.currentRow()
 
     def add_note(self):
         current_name = f"{self.first_name_line_edit.text()} {self.last_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
@@ -171,6 +176,9 @@ class MainWindow(QMainWindow):
             start_time = time(*list(map(int, list_of_notes[-1]['Время окончания'].split(":"))))
             self.start_time_edit.setMinimumTime(start_time)
             self.finish_time_edit.setMinimumTime(start_time)
+        else:
+            self.start_time_edit.setMinimumTime(time(8, 0))
+            self.finish_time_edit.setMinimumTime(time(8, 0))
         for n, i in enumerate(list_of_notes):
             print(i)
             self.table_widget.setItem(n, 0, QTableWidgetItem(i['Дата']))
@@ -193,3 +201,14 @@ class MainWindow(QMainWindow):
                      'Время окончания': i.finish_time.strftime('%H:%M'), })
         list_of_notes.sort(key=lambda x: x['Дата'])
         return list_of_notes
+
+    def delete_note(self):
+        row = self.get_row()
+        date, name = self.get_selected_cell_value()
+        print(date, name)
+        patient = Patient.get(Patient.current_name==name)
+        note = Note.delete().where(Note.date == date and Note.Patient_id == patient.id)
+        note.execute()
+        # self.table_widget.removeRow(row)
+        self.show_notes()
+        print(1)

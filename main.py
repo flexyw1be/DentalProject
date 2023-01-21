@@ -4,7 +4,7 @@ from data.all_models import *
 from main_window import MainWindow
 from PyQt5 import uic
 from utitlities import *
-from config import *
+from data.config import *
 
 
 class Enter(QMainWindow):
@@ -64,9 +64,20 @@ class Enter(QMainWindow):
         self.users_combo_box.addItems(self.user_names)
 
     def enter(self):
-        self.main_window = MainWindow(self.users_combo_box.currentText(), self.user_names)
-        self.main_window.show()
-        self.hide()
+        if self.check_password():
+            self.main_window = MainWindow(self.users_combo_box.currentText(), self.user_names)
+            self.main_window.show()
+            self.hide()
+        else:
+            self.password_label.setText('Пароль не подходит')
+
+    def check_password(self):
+        name = self.users_combo_box.currentText()
+        if self.user_names == ADMINS:
+            member = Admin.get(Admin.current_name == name)
+        else:
+            member = Doctor.get(Doctor.current_name == name)
+        return str(member.password) == self.password_line_edit.text()
 
     def exit(self):
         quit()
