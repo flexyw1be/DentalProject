@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QLineEdit
 from PyQt5.QtGui import QIcon
+
 from data.all_models import *
 from main_window import MainWindow
 from PyQt5 import uic
@@ -19,6 +20,7 @@ class Enter(QMainWindow):
         self.doctor_push_button.clicked.connect(self.set_doctor_user)
         self.enter_push_button.clicked.connect(self.enter)
         self.exit_push_button.clicked.connect(self.exit)
+        self.password_line_edit.setEchoMode(QLineEdit.Password)
 
         self.exit_push_button.setStyleSheet("QPushButton"
                                             "{"

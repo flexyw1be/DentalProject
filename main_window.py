@@ -10,6 +10,7 @@ from medicalCard import MedicalCard
 from schedule import Schedule
 from specialist import Specialist
 from utitlities import *
+from accept import Accept
 
 
 class MainWindow(QMainWindow):
@@ -62,7 +63,7 @@ class MainWindow(QMainWindow):
                                             "{"
                                             "background-color : lightgrey;"
                                             "}")
-        self.cancel_push_button.setStyleSheet("QPushButton"
+        self.cancel_notes_push_button.setStyleSheet("QPushButton"
                                               "{"
                                               "background-color : white;"
                                               "}"
@@ -74,9 +75,10 @@ class MainWindow(QMainWindow):
 
         self.calendar_widget.clicked.connect(self.show_notes)
 
-        self.cancel_notes_push_button.clicked.connect(self.delete_note)
+        self.cancel_push_button.clicked.connect(self.delete_note)
 
         self.show_notes()
+        self.accept = Accept('')
 
     def exit(self):
         quit()
@@ -132,6 +134,8 @@ class MainWindow(QMainWindow):
         self.table_sort = 'ring_patients'
         self.lose_push_button.hide()
         self.accept_push_button.hide()
+
+        self.accept_widget = Accept('')
 
     def get_selected_cell_value(self):
         current_row = self.table_widget.currentRow()
@@ -204,6 +208,8 @@ class MainWindow(QMainWindow):
         patient = Patient.get(Patient.current_name == name)
         note = Note.delete().where(Note.date == date and Note.Patient_id == patient.id)
         note.execute()
-        # self.table_widget.removeRow(row)
+        self.table_widget.removeRow(row)
         self.show_notes()
-        print(1)
+
+
+

@@ -9,6 +9,8 @@ REGISTER_UI = 'ui/register.ui'
 SPECIALIST_UI = 'ui/specialist.ui'
 SCHEDULE_UI = 'ui/schedule.ui'
 
+ACCEPT_UI = 'ui/accept.ui'
+
 MAIN_UI = 'ui/main.ui'
 MEDICAL_CARD_UI = 'ui/medicalCard.ui'
 
