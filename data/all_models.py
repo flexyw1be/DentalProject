@@ -55,6 +55,7 @@ class Patient(Model):
 
 class Price(Model):
     id = PrimaryKeyField(unique=True)
+    article = IntegerField(null=False)
     price = IntegerField(null=False)
 
     class Meta:

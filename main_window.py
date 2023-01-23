@@ -32,6 +32,7 @@ class MainWindow(QMainWindow):
         doctors = [i.current_name for i in get_without_failing(Doctor, (Doctor.id > 0))]
         self.doctor_combo_box.addItems(doctors)
         print(self.doctor_combo_box.currentText())
+        self.proof = False
 
         self.card_push_button.setStyleSheet("QPushButton"
                                             "{"
@@ -64,10 +65,10 @@ class MainWindow(QMainWindow):
                                             "background-color : lightgrey;"
                                             "}")
         self.cancel_notes_push_button.setStyleSheet("QPushButton"
-                                              "{"
-                                              "background-color : white;"
-                                              "}"
-                                              )
+                                                    "{"
+                                                    "background-color : white;"
+                                                    "}"
+                                                    )
 
         self.table_sort = 'canceled_appointments'
 
@@ -78,7 +79,9 @@ class MainWindow(QMainWindow):
         self.cancel_push_button.clicked.connect(self.delete_note)
 
         self.show_notes()
-        self.accept = Accept('')
+        self.accept_widget = Accept('')
+        self.accept_widget.accept_push_button.clicked.connect(self.ok)
+        self.accept_widget.not_accept_push_button.clicked.connect(self.not_ok)
 
     def exit(self):
         quit()
@@ -110,10 +113,10 @@ class MainWindow(QMainWindow):
                                             "background-color : lightgrey;"
                                             "}")
         self.cancel_notes_push_button.setStyleSheet("QPushButton"
-                                              "{"
-                                              "background-color : white;"
-                                              "}"
-                                              )
+                                                    "{"
+                                                    "background-color : white;"
+                                                    "}"
+                                                    )
         # self.ring_push_button.resize(176, 28)
         # self.cancel_push_button.resize(176, 28)
         self.table_sort = 'canceled_appointments'
@@ -126,16 +129,14 @@ class MainWindow(QMainWindow):
                                             "background-color : white;"
                                             "}")
         self.cancel_notes_push_button.setStyleSheet("QPushButton"
-                                              "{"
-                                              "background-color : lightgrey;"
-                                              "}"
-                                              )
+                                                    "{"
+                                                    "background-color : lightgrey;"
+                                                    "}"
+                                                    )
 
         self.table_sort = 'ring_patients'
         self.lose_push_button.hide()
         self.accept_push_button.hide()
-
-        self.accept_widget = Accept('')
 
     def get_selected_cell_value(self):
         current_row = self.table_widget.currentRow()
@@ -146,6 +147,9 @@ class MainWindow(QMainWindow):
         return self.table_widget.currentRow()
 
     def add_note(self):
+        self.check(self.set_note, 'Подтвердите запись')
+
+    def set_note(self):
         current_name = f"{self.last_name_line_edit.text()} {self.first_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
         date = datetime(day=date[0], month=date[1], year=date[2])
@@ -155,35 +159,44 @@ class MainWindow(QMainWindow):
         start_time = time(*list(map(int, self.start_time_edit.text().split(':'))))
         finish_time = time(*list(map(int, self.finish_time_edit.text().split(':'))))
 
-        requset = Patient.get(Patient.current_name == current_name)
-        if not requset:
+        request = get_without_failing(Patient, Patient.current_name == current_name)
+        if request == None:
             member = Patient.create(last_name=self.last_name_line_edit.text(),
-                                first_name=self.first_name_line_edit.text(),
-                                middle_name=self.middle_name_line_edit.text(), current_name=current_name,
-                                date=date, start_time=start_time, finish_time=finish_time)
+                                    first_name=self.first_name_line_edit.text(),
+                                    middle_name=self.middle_name_line_edit.text(), current_name=current_name,
+                                    date=date, start_time=start_time, finish_time=finish_time)
             member.save()
         member = Patient.get(Patient.current_name == current_name)
         note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,
                            finish_time=finish_time)
         note.save()
-        self.show_notes()
 
+        self.last_name_line_edit.setText('')
+        self.first_name_line_edit.setText('')
+        self.middle_name_line_edit.setText('')
+
+        self.show_notes()
     def show_notes(self):
         list_of_notes = self.get_notes()
         self.table_widget.setRowCount(len(list_of_notes))
-        if list_of_notes:
-            # start_time = list(map(int, list_of_notes[-1]['Время окончания'].split(":")))
-            start_time = time(*list(map(int, list_of_notes[-1]['Время окончания'].split(":"))))
-            self.start_time_edit.setMinimumTime(start_time)
-            self.finish_time_edit.setMinimumTime(start_time)
-        else:
-            self.start_time_edit.setMinimumTime(time(8, 0))
-            self.finish_time_edit.setMinimumTime(time(8, 0))
+        # self.get_time()
         for n, i in enumerate(list_of_notes):
             print(i)
             self.table_widget.setItem(n, 0, QTableWidgetItem(i['Время']))
             self.table_widget.setItem(n, 1, QTableWidgetItem(i['Пациент']))
             self.table_widget.setItem(n, 2, QTableWidgetItem(i['Врач']))
+
+    # def get_time(self):
+    #     list_of_notes = self.get_notes()
+    #     print(list_of_notes)
+    #     if list_of_notes:
+    #         start_time = time(*list(map(int, list_of_notes[-1]['Время окончания'].split(":"))))
+    #         self.start_time_edit.setMinimumTime(start_time)
+    #         self.finish_time_edit.setMinimumTime(start_time)
+    #     else:
+    #         print(1)
+    #         self.start_time_edit.setMinimumTime(time(8, 0))
+    #         self.finish_time_edit.setMinimumTime(time(8, 0))
 
     def get_notes(self):
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
@@ -202,14 +215,51 @@ class MainWindow(QMainWindow):
         return list_of_notes
 
     def delete_note(self):
+        self.check(self.delete, 'Подтвердите удаление записи')
+    #     self.accept_widget.accept_push_button.clicked.connect(self.delete)
+    #     self.accept_widget.label.setText('Подтвердите удаление записи')
+    #     self.accept_widget.show()
+    #     self.setEnabled(False)
+    #     self.get_time()
+    #     self.show_notes()
+
+    def check(self, func, text):
+        self.accept_widget.accept_push_button.clicked.connect(func)
+        self.accept_widget.label.setText(text)
+        self.accept_widget.show()
+        self.setEnabled(False)
+        self.show_notes()
+
+    def delete(self):
         row = self.get_row()
         date, name = self.get_selected_cell_value()
         print(date, name)
         patient = Patient.get(Patient.current_name == name)
+        note = Note.get(Note.date == date and Note.Patient_id == patient.id)
+
         note = Note.delete().where(Note.date == date and Note.Patient_id == patient.id)
         note.execute()
+
         self.table_widget.removeRow(row)
-        self.show_notes()
+        self.accept_widget.accept_push_button.clicked.connect(self.ok)
+
+    def ok(self):
+        self.accept_widget.proof = True
+        self.accept_widget.hide()
+        self.setEnabled(True)
+
+    def not_ok(self):
+        self.accept_widget.hide()
+        self.setEnabled(True)
 
 
-
+# .| : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : :”-'\,,
+# ..\: : : : : : : : : : :'\: : : : : : : : : : : : : :~,,: : : : : : : : : “~-.,_
+# ...\ : : : : : : : : : : :\: /: : : : : : : : : : : : : : : “,: : : : : : : : : : :"~,_
+# ... .\: : : : : : : : : : :\|: : : : : : : : :_._ : : : : : : \: : : : : : : : : : : : :”- .
+# ... ...\: : : : : : : : : : \: : : : : : : : ( O ) : : : : : : \: : : : : : : : : : : : : : '\._
+# ... ... .\ : : : : : : : : : '\': : : : : : : :"*": : : : : : : :|: : : : : : : : : : : : : : : |0)
+# ... ... ...\ : : : : : : : : : '\: : : : : : : : : : : : : : : :/: : : : : : : : : : : : : : : /""
+# ... ... .....\ : : : : : : : : : \: : : : : : : : : : : : : ,-“: : : : : : : : : : : : : : : :/
+# ... ... ... ...\ : : : : : : : : : \: : : : : : : : : _=" : : : : : ',_.: : : : : : : :,-“
+# ... ... ... ... \,: : : : : : : : : \: :"”'~---~”" : : : : : : : : : : : : = :"”~~
