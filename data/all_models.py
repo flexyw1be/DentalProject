@@ -92,6 +92,21 @@ class Note(Model):
         database = db
 
 
+class History(Model):
+    id = AutoField(unique=True)
+    name = AnyField(null=False)
+    date = DateField(null=True)
+    time = TimeField(null=True)
+    Patient_id = AnyField(null=False)
+    Doctor_id = AnyField(null=False)
+    list_of_services = AnyField(null=False)
+    amount = AnyField(null=False)
+    note = AnyField(null=False)
+    class Meta:
+        database = db
+
+
+
 Doctor.create_table()
 # LoginData.create_table()
 Admin.create_table()
@@ -100,3 +115,4 @@ Price.create_table()
 Preparations.create_table()
 Services.create_table()
 Note.create_table()
+History.create_table()

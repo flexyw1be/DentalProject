@@ -11,6 +11,7 @@ from schedule import Schedule
 from specialist import Specialist
 from utitlities import *
 from accept import Accept
+from error import Error
 
 
 class MainWindow(QMainWindow):
@@ -83,6 +84,9 @@ class MainWindow(QMainWindow):
         self.accept_widget.accept_push_button.clicked.connect(self.ok)
         self.accept_widget.not_accept_push_button.clicked.connect(self.not_ok)
 
+        self.error_widget = Error('')
+        self.error_widget.accept_push_button.clicked.connect(self.error)
+
     def exit(self):
         quit()
 
@@ -95,8 +99,12 @@ class MainWindow(QMainWindow):
         self.lastTimeComboBox.addItems([f'{x}:00' for x in range(n, FINISH_TIME + 1)])
 
     def show_card(self):
-        print(self.get_selected_cell_value()[1])
-        self.card = MedicalCard(self.get_selected_cell_value()[1])
+        value = self.get_selected_cell_value()
+        if not value:
+            return
+        date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
+        date = datetime(day=date[0], month=date[1], year=date[2])
+        self.card = MedicalCard(value[1], date, value[0], value[2])
         self.card.show()
 
     def show_schedule(self):
@@ -117,8 +125,7 @@ class MainWindow(QMainWindow):
                                                     "background-color : white;"
                                                     "}"
                                                     )
-        # self.ring_push_button.resize(176, 28)
-        # self.cancel_push_button.resize(176, 28)
+
         self.table_sort = 'canceled_appointments'
         self.lose_push_button.show()
         self.accept_push_button.show()
@@ -141,13 +148,16 @@ class MainWindow(QMainWindow):
     def get_selected_cell_value(self):
         current_row = self.table_widget.currentRow()
         current_column = 0
-        return self.table_widget.item(current_row, current_column).text(), self.table_widget.item(current_row, 1).text()
+        if not self.table_widget.item(current_row, current_column) or not self.table_widget.item(current_row, 1):
+            self.check(self.error_widget, self.pass_func, 'Ошибка\nВыберите запись')
+            return None
+        return self.table_widget.item(current_row, current_column).text(), self.table_widget.item(current_row, 1).text(), self.table_widget.item(current_row, 2).text()
 
     def get_row(self):
         return self.table_widget.currentRow()
 
     def add_note(self):
-        self.check(self.set_note, 'Подтвердите запись')
+        self.check(self.accept_widget, self.set_note, 'Подтвердите запись')
 
     def set_note(self):
         current_name = f"{self.last_name_line_edit.text()} {self.first_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
@@ -176,6 +186,7 @@ class MainWindow(QMainWindow):
         self.middle_name_line_edit.setText('')
 
         self.show_notes()
+
     def show_notes(self):
         list_of_notes = self.get_notes()
         self.table_widget.setRowCount(len(list_of_notes))
@@ -185,18 +196,6 @@ class MainWindow(QMainWindow):
             self.table_widget.setItem(n, 0, QTableWidgetItem(i['Время']))
             self.table_widget.setItem(n, 1, QTableWidgetItem(i['Пациент']))
             self.table_widget.setItem(n, 2, QTableWidgetItem(i['Врач']))
-
-    # def get_time(self):
-    #     list_of_notes = self.get_notes()
-    #     print(list_of_notes)
-    #     if list_of_notes:
-    #         start_time = time(*list(map(int, list_of_notes[-1]['Время окончания'].split(":"))))
-    #         self.start_time_edit.setMinimumTime(start_time)
-    #         self.finish_time_edit.setMinimumTime(start_time)
-    #     else:
-    #         print(1)
-    #         self.start_time_edit.setMinimumTime(time(8, 0))
-    #         self.finish_time_edit.setMinimumTime(time(8, 0))
 
     def get_notes(self):
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
@@ -215,20 +214,17 @@ class MainWindow(QMainWindow):
         return list_of_notes
 
     def delete_note(self):
-        self.check(self.delete, 'Подтвердите удаление записи')
-    #     self.accept_widget.accept_push_button.clicked.connect(self.delete)
-    #     self.accept_widget.label.setText('Подтвердите удаление записи')
-    #     self.accept_widget.show()
-    #     self.setEnabled(False)
-    #     self.get_time()
-    #     self.show_notes()
+        self.check(self.accept_widget, self.delete, 'Подтвердите удаление записи')
 
-    def check(self, func, text):
-        self.accept_widget.accept_push_button.clicked.connect(func)
-        self.accept_widget.label.setText(text)
-        self.accept_widget.show()
+    def check(self, main_func, func, text):
+        main_func.accept_push_button.clicked.connect(func)
+        main_func.label.setText(text)
+        main_func.show()
         self.setEnabled(False)
-        self.show_notes()
+
+    def error(self):
+        self.error_widget.hide()
+        self.setEnabled(True)
 
     def delete(self):
         row = self.get_row()
@@ -241,10 +237,8 @@ class MainWindow(QMainWindow):
         note.execute()
 
         self.table_widget.removeRow(row)
-        self.accept_widget.accept_push_button.clicked.connect(self.ok)
 
     def ok(self):
-        self.accept_widget.proof = True
         self.accept_widget.hide()
         self.setEnabled(True)
 
@@ -252,14 +246,5 @@ class MainWindow(QMainWindow):
         self.accept_widget.hide()
         self.setEnabled(True)
 
-
-# .| : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : :”-'\,,
-# ..\: : : : : : : : : : :'\: : : : : : : : : : : : : :~,,: : : : : : : : : “~-.,_
-# ...\ : : : : : : : : : : :\: /: : : : : : : : : : : : : : : “,: : : : : : : : : : :"~,_
-# ... .\: : : : : : : : : : :\|: : : : : : : : :_._ : : : : : : \: : : : : : : : : : : : :”- .
-# ... ...\: : : : : : : : : : \: : : : : : : : ( O ) : : : : : : \: : : : : : : : : : : : : : '\._
-# ... ... .\ : : : : : : : : : '\': : : : : : : :"*": : : : : : : :|: : : : : : : : : : : : : : : |0)
-# ... ... ...\ : : : : : : : : : '\: : : : : : : : : : : : : : : :/: : : : : : : : : : : : : : : /""
-# ... ... .....\ : : : : : : : : : \: : : : : : : : : : : : : ,-“: : : : : : : : : : : : : : : :/
-# ... ... ... ...\ : : : : : : : : : \: : : : : : : : : _=" : : : : : ',_.: : : : : : : :,-“
-# ... ... ... ... \,: : : : : : : : : \: :"”'~---~”" : : : : : : : : : : : : = :"”~~
+    def pass_func(self):
+        return
