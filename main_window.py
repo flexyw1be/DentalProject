@@ -3,7 +3,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from PyQt5.QtGui import QIcon
-from datetime import datetime, time, date
+from datetime import datetime, time, date, timedelta
 from data.all_models import *
 from data.config import *
 from medicalCard import MedicalCard
@@ -79,6 +79,9 @@ class MainWindow(QMainWindow):
 
         self.cancel_push_button.clicked.connect(self.delete_note)
 
+        self.lose_push_button.clicked.connect(self.cancel_note)
+        self.get_ring_patients()
+
         self.show_notes()
         self.accept_widget = Accept('')
         self.accept_widget.accept_push_button.clicked.connect(self.ok)
@@ -130,6 +133,46 @@ class MainWindow(QMainWindow):
         self.table_sort = 'canceled_appointments'
         self.lose_push_button.show()
         self.accept_push_button.show()
+        self.get_ring_patients()
+
+    def get_ring_patients(self):
+        date = datetime.today().date()
+        date1 = date - timedelta(days=1)
+        print(date1, date)
+        s = get_without_failing(Note, date1 < Note.date <= date)
+        self.patients_table.clear()
+        if not s:
+            return
+        for i in s:
+            if i.status != False:
+                patient = Patient.get(Patient.id == i.Patient_id)
+                self.patients_table.addItem(f'{patient.current_name}    : {patient.number}')
+
+    def get_canceled_patients(self):
+        date = datetime.today().date()
+        date1 = date - timedelta(days=1)
+        print(date1, date)
+        s = get_without_failing(Note, date1 < Note.date <= date)
+        self.patients_table.clear()
+        for i in s:
+            if i.status == False:
+                patient = Patient.get(Patient.id == i.Patient_id)
+                self.patients_table.addItem(f'{patient.current_name}    : {patient.number}')
+
+    def cancel_note(self):
+        name = self.patients_table.currentItem()
+        if not name:
+            return
+        name = name.text().split('    : ')[0]
+        print(name)
+        patient = Patient.get(Patient.current_name == name)
+        date = datetime.today().date()
+        date1 = date - timedelta(days=1)
+        s = get_without_failing(Note, date1 < Note.date <= date and Note.Patient_id == patient.id)
+        for i in s:
+            i.status = False
+            i.save()
+        self.get_ring_patients()
 
     def set_canceled_appointments(self):
         self.ring_push_button.setStyleSheet("QPushButton"
@@ -145,6 +188,8 @@ class MainWindow(QMainWindow):
         self.table_sort = 'ring_patients'
         self.lose_push_button.hide()
         self.accept_push_button.hide()
+        self.patients_table.clear()
+        self.get_canceled_patients()
 
     def get_selected_cell_value(self):
         current_row = self.table_widget.currentRow()
@@ -152,7 +197,9 @@ class MainWindow(QMainWindow):
         if not self.table_widget.item(current_row, current_column) or not self.table_widget.item(current_row, 1):
             self.check(self.error_widget, self.pass_func, 'Ошибка\nВыберите запись')
             return None
-        return self.table_widget.item(current_row, current_column).text(), self.table_widget.item(current_row, 1).text(), self.table_widget.item(current_row, 2).text()
+        return self.table_widget.item(current_row, current_column).text(), self.table_widget.item(current_row,
+                                                                                                  1).text(), self.table_widget.item(
+            current_row, 2).text()
 
     def get_row(self):
         return self.table_widget.currentRow()
@@ -162,9 +209,6 @@ class MainWindow(QMainWindow):
 
     def set_note(self):
         current_name = f"{self.last_name_line_edit.text()} {self.first_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
-        self.last_name_line_edit.setText('')
-        self.first_name_line_edit.setText('')
-        self.middle_name_line_edit.setText('')
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
         date = datetime(day=date[0], month=date[1], year=date[2])
         number = self.number_line_edit.text()
@@ -178,14 +222,15 @@ class MainWindow(QMainWindow):
             member = Patient.create(last_name=self.last_name_line_edit.text(),
                                     first_name=self.first_name_line_edit.text(),
                                     middle_name=self.middle_name_line_edit.text(), current_name=current_name,
-                                    date=date, start_time=start_time, finish_time=finish_time, number = number)
+                                    date=date, start_time=start_time, finish_time=finish_time, number=number)
             member.save()
         member = Patient.get(Patient.current_name == current_name)
         note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,
                            finish_time=finish_time)
         note.save()
-
-
+        self.last_name_line_edit.setText('')
+        self.first_name_line_edit.setText('')
+        self.middle_name_line_edit.setText('')
 
         self.show_notes()
 

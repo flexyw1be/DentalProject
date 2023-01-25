@@ -78,6 +78,7 @@ class Note(Model):
     date = DateField(null=True)
     start_time = TimeField(null=True)
     finish_time = TimeField(null=True)
+    status = AnyField(null=True)
 
     class Meta:
         database = db

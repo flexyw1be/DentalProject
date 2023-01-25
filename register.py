@@ -48,7 +48,6 @@ class Register(QMainWindow):
 
     def ok(self):
         self.check_widget.hide()
-        # return True
 
     def hasher(self, password):
         salt = '123'.encode('utf-8')

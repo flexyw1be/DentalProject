@@ -16,6 +16,8 @@ ERROR_UI = 'ui/error.ui'
 MAIN_UI = 'ui/main.ui'
 MEDICAL_CARD_UI = 'ui/medicalCard.ui'
 
+SERVICE_UI = 'ui/services.ui'
+
 ICON = 'data/icon.png'
 number = AnyField(null=False)
 

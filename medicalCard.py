@@ -19,7 +19,7 @@ class MedicalCard(QMainWindow):
         self.name = name
         self.doctor = doctor
         member = Patient.get(Patient.current_name == self.name)
-
+        print(member.last_name)
         self.update_list_of_notes(member)
 
         self.name_label.setText(f'{member.last_name} {member.first_name} {member.middle_name}')
