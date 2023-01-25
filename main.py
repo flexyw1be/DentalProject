@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QLineEdit
 from PyQt5.QtGui import QIcon
 
+import hashlib
 from data.all_models import *
 from main_window import MainWindow
 from PyQt5 import uic
@@ -79,7 +80,13 @@ class Enter(QMainWindow):
             member = Admin.get(Admin.current_name == name)
         else:
             member = Doctor.get(Doctor.current_name == name)
-        return str(member.password) == self.password_line_edit.text()
+        salt = '123'.encode('utf-8')
+        key = hashlib.pbkdf2_hmac(
+            'sha256',
+            self.password_line_edit.text().encode('utf-8'),
+            salt,
+            100000)
+        return member.password == key
 
     def exit(self):
         quit()

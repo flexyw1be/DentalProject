@@ -3,7 +3,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from PyQt5.QtGui import QIcon
-from datetime import datetime, time
+from datetime import datetime, time, date
 from data.all_models import *
 from data.config import *
 from medicalCard import MedicalCard
@@ -103,7 +103,8 @@ class MainWindow(QMainWindow):
         if not value:
             return
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
-        date = datetime(day=date[0], month=date[1], year=date[2])
+        date = datetime(day=date[0], month=date[1], year=date[2]).strftime('%d:%m:%y')
+        print(value[2])
         self.card = MedicalCard(value[1], date, value[0], value[2])
         self.card.show()
 
@@ -161,6 +162,9 @@ class MainWindow(QMainWindow):
 
     def set_note(self):
         current_name = f"{self.last_name_line_edit.text()} {self.first_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
+        self.last_name_line_edit.setText('')
+        self.first_name_line_edit.setText('')
+        self.middle_name_line_edit.setText('')
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
         date = datetime(day=date[0], month=date[1], year=date[2])
         number = self.number_line_edit.text()
@@ -174,16 +178,14 @@ class MainWindow(QMainWindow):
             member = Patient.create(last_name=self.last_name_line_edit.text(),
                                     first_name=self.first_name_line_edit.text(),
                                     middle_name=self.middle_name_line_edit.text(), current_name=current_name,
-                                    date=date, start_time=start_time, finish_time=finish_time)
+                                    date=date, start_time=start_time, finish_time=finish_time, number = number)
             member.save()
         member = Patient.get(Patient.current_name == current_name)
         note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,
                            finish_time=finish_time)
         note.save()
 
-        self.last_name_line_edit.setText('')
-        self.first_name_line_edit.setText('')
-        self.middle_name_line_edit.setText('')
+
 
         self.show_notes()
 
@@ -228,8 +230,8 @@ class MainWindow(QMainWindow):
 
     def delete(self):
         row = self.get_row()
-        date, name = self.get_selected_cell_value()
-        print(date, name)
+        value = self.get_selected_cell_value()
+        date, name = value[0], value[1]
         patient = Patient.get(Patient.current_name == name)
         note = Note.get(Note.date == date and Note.Patient_id == patient.id)
 

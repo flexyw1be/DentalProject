@@ -4,22 +4,22 @@ db = SqliteDatabase('data/database.db')
 
 
 class Doctor(Model):
-    id = PrimaryKeyField(unique=True)
+    id = AutoField(unique=True)
     last_name = AnyField(null=False)
     first_name = AnyField(null=False)
     middle_name = AnyField(null=True)
     current_name = AnyField(null=False)
     password = AnyField(null=False)
-    address = AnyField(null=False)
-    number = AnyField(null=False)
-    date = AnyField(null=False)
+    address = AnyField(null=True)
+    number = AnyField(null=True)
+    date = AnyField(null=True)
 
     class Meta:
         database = db
 
 
 class Admin(Model):
-    id = PrimaryKeyField(unique=True)
+    id = AutoField(unique=True)
     last_name = AnyField(null=False)
     first_name = AnyField(null=False)
     middle_name = AnyField(null=True)
@@ -30,17 +30,8 @@ class Admin(Model):
         database = db
 
 
-# class LoginData(Model):
-#     id = PrimaryKeyField(unique=True)
-#     login = AnyField(null=False)
-#     password = CharField(null=False)
-#
-#     class Meta:
-#         database = db
-
-
 class Patient(Model):
-    id = PrimaryKeyField(unique=True)
+    id = AutoField(unique=True)
     last_name = AnyField(null=False)
     first_name = AnyField(null=False)
     middle_name = AnyField(null=True)
@@ -54,7 +45,7 @@ class Patient(Model):
 
 
 class Price(Model):
-    id = PrimaryKeyField(unique=True)
+    id = AutoField(unique=True)
     article = IntegerField(null=False)
     price = IntegerField(null=False)
 
@@ -63,7 +54,7 @@ class Price(Model):
 
 
 class Preparations(Model):
-    id = PrimaryKeyField(unique=True)
+    id = AutoField(unique=True)
     article = AnyField(null=False)
     name = AnyField(null=False)
 
@@ -72,7 +63,7 @@ class Preparations(Model):
 
 
 class Services(Model):
-    id = PrimaryKeyField(unique=True)
+    id = AutoField(unique=True)
     article = AnyField(null=False)
     name = AnyField(null=False)
 
@@ -81,7 +72,7 @@ class Services(Model):
 
 
 class Note(Model):
-    id = PrimaryKeyField(unique=True)
+    id = AutoField(unique=True)
     Patient_id = AnyField(null=False)
     Doctor_id = AnyField(null=False)
     date = DateField(null=True)
@@ -95,8 +86,7 @@ class Note(Model):
 class History(Model):
     id = AutoField(unique=True)
     name = AnyField(null=False)
-    date = DateField(null=True)
-    time = TimeField(null=True)
+    datetime = AnyField(null=True)
     Patient_id = AnyField(null=False)
     Doctor_id = AnyField(null=False)
     list_of_services = AnyField(null=False)

@@ -19,8 +19,10 @@ MEDICAL_CARD_UI = 'ui/medicalCard.ui'
 ICON = 'data/icon.png'
 number = AnyField(null=False)
 
-DOCTORS = [i.current_name for i in get_without_failing(Doctor, Doctor.id)]
-ADMINS = [i.current_name for i in get_without_failing(Admin, Admin.id)]
+if get_without_failing(Doctor, Doctor.id) != None:
+    DOCTORS = [i.current_name for i in get_without_failing(Doctor, Doctor.id)]
+if get_without_failing(Admin, Admin.id) != None:
+    ADMINS = [i.current_name for i in get_without_failing(Admin, Admin.id)]
 
 POSITIONS = {Admin: 0,
              Doctor: 1

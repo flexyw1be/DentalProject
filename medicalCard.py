@@ -17,14 +17,10 @@ class MedicalCard(QMainWindow):
         self.setWindowTitle('Медицинская Карта')
         self.setWindowIcon(QIcon(ICON))
         self.name = name
-
+        self.doctor = doctor
         member = Patient.get(Patient.current_name == self.name)
 
-        s = get_without_failing(History, History.Patient_id == member.id)
-        for n, i in enumerate(s):
-            doctor = Doctor.get(Doctor.id == i.Doctor_id)
-            self.list_of_notes.addItem(
-                f'{n + 1}    |   {doctor.current_name}   |   {i.date}    |   {i.time}    |   {i.name}    |   {i.note}')
+        self.update_list_of_notes(member)
 
         self.name_label.setText(f'{member.last_name} {member.first_name} {member.middle_name}')
         self.date_label.setText(member.date)
@@ -34,7 +30,7 @@ class MedicalCard(QMainWindow):
         self.services = self.get_services()
         self.date = date
         self.time = time
-        self.doctor = doctor
+        print(doctor, 1111)
         self.serv = True
 
         self.services_push_button.setStyleSheet("QPushButton"
@@ -62,14 +58,18 @@ class MedicalCard(QMainWindow):
         self.error_widget = Error('')
         self.error_widget.accept_push_button.clicked.connect(self.error)
 
-        self.delete_push_button.clicked.connect(self.delete_service)
-        if datetime.datetime.today() < self.date:
-            self.tabWidget.setEnabled(False)
 
-        s = get_without_failing(History, History.date == self.date and History.time == self.time)
-        if s:
+        self.delete_push_button.clicked.connect(self.delete_service)
+        # if datetime.datetime.today() < self.date:
+        #     self.tabWidget.setEnabled(False)
+        # print(self.date, self.time)
+        s = get_without_failing(History, (History.datetime == f'{self.date} {self.time}'))
+        # print(s.date, self.date)
+        print(s)
+        if s != None:
+            print(111)
             self.save_push_button.setText('Изменить')
-            history_note = History.get(History.date == self.date and History.time == self.time)
+            history_note = History.get(History.datetime == f'{self.date} {self.time}')
             self.cost = history_note.amount
             print(history_note.list_of_services)
             self.cost_line_edit.setText(str(history_note.amount))
@@ -175,13 +175,15 @@ class MedicalCard(QMainWindow):
 
     def save_note(self):
         member = Patient.get(Patient.current_name == self.name)
+        print(self.doctor)
         doctor = Doctor.get(Doctor.current_name == self.doctor)
         print(self.date, self.time, member.id, doctor.id, ' '.join(self.list_of_services), self.cost,
               self.note_text_edit.toPlainText())
-        s = get_without_failing(History, History.date == self.date and History.time == self.time)
+        s = get_without_failing(History, History.datetime == f'{self.date} {self.time}')
         items = [self.price_list.item(x).text() for x in range(self.price_list.count())]
         if not s:
-            history_note = History.create(name=str(self.appeal_text_edit.toPlainText()), date=self.date, time=self.time,
+            history_note = History.create(name=str(self.appeal_text_edit.toPlainText()),
+                                          datetime=f'{self.date} {self.time}',
                                           Patient_id=member.id, Doctor_id=doctor.id, list_of_services='\n'.join(items),
                                           amount=self.cost, note=self.note_text_edit.toPlainText())
         else:
@@ -191,6 +193,7 @@ class MedicalCard(QMainWindow):
             history_note.amount = self.cost
             history_note.note = self.note_text_edit.toPlainText()
             history_note.save()
+            self.update_list_of_notes(member)
 
     def check(self, main_func, func, text):
         main_func.accept_push_button.clicked.connect(func)
@@ -212,3 +215,11 @@ class MedicalCard(QMainWindow):
     def error(self):
         self.error_widget.hide()
         self.setEnabled(True)
+
+    def update_list_of_notes(self, member):
+        s = get_without_failing(History, History.Patient_id == member.id)
+        if s:
+            for n, i in enumerate(s):
+                doctor = Doctor.get(Doctor.id == i.Doctor_id)
+                self.list_of_notes.addItem(
+                    f'{n + 1}    |   {doctor.current_name}   |   {i.datetime}    |   {i.name}    |   {i.note}')
