@@ -13,11 +13,16 @@ class Specialist(QMainWindow):
         self.setWindowTitle('Пользователь')
         self.setWindowIcon(QIcon(ICON))
         self.name = name
-        member = Doctor.get(Doctor.current_name == self.name)
-        self.name_label.setText(f'{member.last_name} {member.first_name} {member.middle_name}')
-        self.date_label.setText(member.date)
-        self.number_label.setText(f'{member.number}')
-        self.adress_label.setText(member.address)
-        # self.date_label.setText(member.date)
-        # self.address_label.setText(member.address)
-        # self.number_label.setText(str(member.number))
+        print(self.name)
+        self.permission = 'doctor'
+        member = get_without_failing(Doctor, Doctor.current_name == self.name)
+        if not member:
+            member = get_without_failing(Admin, Admin.current_name == self.name)
+            self.permission = 'admin'
+        member = member[0]
+        self.name_label.setText(f'{member.first_name} {member.last_name} {member.middle_name}')
+        if self.permission == 'doctor':
+            self.date_label.setText(member.date) if member.date else ''
+            self.number_label.setText(f'{member.number}') if member.number else ''
+            self.adress_label.setText(member.address) if member.address else ''
+

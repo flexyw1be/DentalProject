@@ -12,3 +12,12 @@ class Schedule(QMainWindow):
         uic.loadUi(SCHEDULE_UI, self)
         self.setWindowTitle('Расписание')
         self.setWindowIcon(QIcon(ICON))
+        self.set_history()
+
+    def set_history(self):
+        notes = get_without_failing(History, History.id)
+        print(notes)
+        for i in notes:
+            patient = Patient.get(Patient.id == i.Patient_id)
+            doctor = Doctor.get(Doctor.id == i.Doctor_id)
+            self.list_widget.addItem(f'{i.datetime}    {patient.current_name}    {doctor.current_name}    {i.amount}    {i.name}    {i.note}')

@@ -75,7 +75,7 @@ class Note(Model):
     id = AutoField(unique=True)
     Patient_id = AnyField(null=False)
     Doctor_id = AnyField(null=False)
-    date = DateField(null=True)
+    date = AnyField(null=True)
     start_time = TimeField(null=True)
     finish_time = TimeField(null=True)
     status = AnyField(null=True)

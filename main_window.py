@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
         if not value:
             return
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
-        date = datetime(day=date[0], month=date[1], year=date[2]).strftime('%d:%m:%y')
+        date = datetime(day=date[0], month=date[1], year=date[2]).strftime('%d-%m-%y')
         print(value[2])
         self.card = MedicalCard(value[1], date, value[0], value[2])
         self.card.show()
@@ -137,9 +137,7 @@ class MainWindow(QMainWindow):
 
     def get_ring_patients(self):
         date = datetime.today().date()
-        date1 = date - timedelta(days=1)
-        print(date1, date)
-        s = get_without_failing(Note, date1 < Note.date <= date)
+        s = get_without_failing(Note, Note.date == date.strftime('%d-%m-%y'))
         self.patients_table.clear()
         if not s:
             return
@@ -150,10 +148,10 @@ class MainWindow(QMainWindow):
 
     def get_canceled_patients(self):
         date = datetime.today().date()
-        date1 = date - timedelta(days=1)
-        print(date1, date)
-        s = get_without_failing(Note, date1 < Note.date <= date)
+        s = get_without_failing(Note, Note.date == date.strftime('%d-%m-%y'))
         self.patients_table.clear()
+        if not s:
+            return
         for i in s:
             if i.status == False:
                 patient = Patient.get(Patient.id == i.Patient_id)
@@ -196,7 +194,7 @@ class MainWindow(QMainWindow):
         current_column = 0
         if not self.table_widget.item(current_row, current_column) or not self.table_widget.item(current_row, 1):
             self.check(self.error_widget, self.pass_func, 'Ошибка\nВыберите запись')
-            return None
+            return 0
         return self.table_widget.item(current_row, current_column).text(), self.table_widget.item(current_row,
                                                                                                   1).text(), self.table_widget.item(
             current_row, 2).text()
@@ -210,15 +208,17 @@ class MainWindow(QMainWindow):
     def set_note(self):
         current_name = f"{self.last_name_line_edit.text()} {self.first_name_line_edit.text()[0].upper()}. {self.middle_name_line_edit.text()[0].upper()}."
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
-        date = datetime(day=date[0], month=date[1], year=date[2])
+        date = datetime(day=date[0], month=date[1], year=date[2]).date().strftime('%d-%m-%y')
         number = self.number_line_edit.text()
         doctor = Doctor.get(Doctor.current_name == self.doctor_combo_box.currentText())
+        print(current_name)
 
         start_time = time(*list(map(int, self.start_time_edit.text().split(':'))))
         finish_time = time(*list(map(int, self.finish_time_edit.text().split(':'))))
 
         request = get_without_failing(Patient, Patient.current_name == current_name)
-        if request == None:
+        print(request)
+        if not request:
             member = Patient.create(last_name=self.last_name_line_edit.text(),
                                     first_name=self.first_name_line_edit.text(),
                                     middle_name=self.middle_name_line_edit.text(), current_name=current_name,
@@ -236,6 +236,7 @@ class MainWindow(QMainWindow):
 
     def show_notes(self):
         list_of_notes = self.get_notes()
+
         self.table_widget.setRowCount(len(list_of_notes))
         # self.get_time()
         for n, i in enumerate(list_of_notes):
@@ -246,7 +247,7 @@ class MainWindow(QMainWindow):
 
     def get_notes(self):
         date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
-        date = datetime(day=date[0], month=date[1], year=date[2])
+        date = datetime(day=date[0], month=date[1], year=date[2]).date().strftime('%d-%m-%y')
         notes = get_without_failing(Note, (Note.date == date))
         list_of_notes = []
         if notes:
@@ -254,14 +255,28 @@ class MainWindow(QMainWindow):
                 member = Patient.get(Patient.id == i.Patient_id)
                 doctor = Doctor.get(Doctor.id == i.Doctor_id)
                 list_of_notes.append(
-                    {'Дата': date.strftime('%d:%m:%y'), 'Время': i.start_time.strftime('%H:%M'),
+                    {'Дата': date, 'Время': i.start_time.strftime('%H:%M'),
                      'Пациент': member.current_name, 'Врач': doctor.current_name,
                      'Время окончания': i.finish_time.strftime('%H:%M'), })
-        list_of_notes.sort(key=lambda x: x['Дата'])
+        list_of_notes.sort(key=lambda x: int(x['Время'].split(':')[0]))
         return list_of_notes
 
     def delete_note(self):
-        self.check(self.accept_widget, self.delete, 'Подтвердите удаление записи')
+        row = self.get_row()
+        value = self.get_selected_cell_value()
+        name = value[1]
+        date = list(map(int, self.calendar_widget.selectedDate().toString('dd.MM.yyyy').split('.')))
+        date = datetime(day=date[0], month=date[1], year=date[2]).date().strftime('%d-%m-%y')
+        patient = Patient.get(Patient.current_name == name)
+        print(date, name)
+
+        note = Note.delete().where(Note.date == date,  Note.Patient_id == patient.id)
+        print(note, 14234)
+        note.execute()
+
+        self.table_widget.removeRow(row)
+        # self.show_notes()
+
 
     def check(self, main_func, func, text):
         main_func.accept_push_button.clicked.connect(func)
@@ -272,18 +287,6 @@ class MainWindow(QMainWindow):
     def error(self):
         self.error_widget.hide()
         self.setEnabled(True)
-
-    def delete(self):
-        row = self.get_row()
-        value = self.get_selected_cell_value()
-        date, name = value[0], value[1]
-        patient = Patient.get(Patient.current_name == name)
-        note = Note.get(Note.date == date and Note.Patient_id == patient.id)
-
-        note = Note.delete().where(Note.date == date and Note.Patient_id == patient.id)
-        note.execute()
-
-        self.table_widget.removeRow(row)
 
     def ok(self):
         self.accept_widget.hide()
