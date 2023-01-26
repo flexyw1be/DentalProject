@@ -19,7 +19,6 @@ class MedicalCard(QMainWindow):
         self.name = name
         self.doctor = doctor
         member = Patient.get(Patient.current_name == self.name)
-        print(member.last_name)
         self.update_list_of_notes(member)
 
         self.name_label.setText(f'{member.last_name} {member.first_name} {member.middle_name}')
@@ -30,7 +29,6 @@ class MedicalCard(QMainWindow):
         self.services = self.get_services()
         self.date = date
         self.time = time
-        print(doctor, 1111)
         self.serv = True
 
         self.services_push_button.setStyleSheet("QPushButton"
@@ -58,16 +56,11 @@ class MedicalCard(QMainWindow):
         self.error_widget = Error('')
         self.error_widget.accept_push_button.clicked.connect(self.error)
 
-
         self.delete_push_button.clicked.connect(self.delete_service)
-        # if datetime.datetime.today() < self.date:
-        #     self.tabWidget.setEnabled(False)
-        # print(self.date, self.time)
+
         s = get_without_failing(History, (History.datetime == f'{self.date} {self.time}'))
-        # print(s.date, self.date)
         print(s)
-        if s != None:
-            print(111)
+        if s:
             self.save_push_button.setText('Изменить')
             history_note = History.get(History.datetime == f'{self.date} {self.time}')
             self.cost = history_note.amount
@@ -84,11 +77,22 @@ class MedicalCard(QMainWindow):
             self.appeal_text_edit.setPlainText(str(history_note.name))
             self.note_text_edit.setPlainText(str(history_note.note))
 
+        self.get_prices()
+
     def get_history(self):
         pass
 
     def get_prices(self):
-        pass
+        self.list_of_amounts.clear()
+        patient = Patient.get(Patient.current_name == self.name)
+        notes = get_without_failing(History, History.Patient_id == patient.id)
+        price = 0
+        if not notes:
+            return
+        for i in notes:
+            self.list_of_amounts.addItem(f'{i.datetime}      {i.amount}')
+            price += i.amount
+        self.amount_label.setText(str(price))
 
     def delete_service(self):
         name = self.price_list.currentItem().text().split()[0][:-1]
@@ -188,12 +192,13 @@ class MedicalCard(QMainWindow):
                                           amount=self.cost, note=self.note_text_edit.toPlainText())
         else:
             self.save_push_button.setText('Изменить')
-            history_note = History.get(History.date == self.date and History.time == self.time)
+            history_note = History.get(History.datetime == f'{self.date} {self.time}')
             history_note.list_of_services = ' '.join(items)
             history_note.amount = self.cost
             history_note.note = self.note_text_edit.toPlainText()
             history_note.save()
             self.update_list_of_notes(member)
+        self.get_prices()
 
     def check(self, main_func, func, text):
         main_func.accept_push_button.clicked.connect(func)
