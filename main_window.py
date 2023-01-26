@@ -1,4 +1,5 @@
 import peewee
+import openpyxl
 from PyQt5 import uic
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
@@ -34,7 +35,7 @@ class MainWindow(QMainWindow):
         self.doctor_combo_box.addItems(doctors)
         print(self.doctor_combo_box.currentText())
         self.proof = False
-
+        # self.get_xlsx()
         self.card_push_button.setStyleSheet("QPushButton"
                                             "{"
                                             "qproperty-icon: url(data/medicalCard.png);"
@@ -270,13 +271,12 @@ class MainWindow(QMainWindow):
         patient = Patient.get(Patient.current_name == name)
         print(date, name)
 
-        note = Note.delete().where(Note.date == date,  Note.Patient_id == patient.id)
+        note = Note.delete().where(Note.date == date, Note.Patient_id == patient.id)
         print(note, 14234)
         note.execute()
 
         self.table_widget.removeRow(row)
         # self.show_notes()
-
 
     def check(self, main_func, func, text):
         main_func.accept_push_button.clicked.connect(func)
@@ -298,3 +298,16 @@ class MainWindow(QMainWindow):
 
     def pass_func(self):
         return
+
+    def get_xlsx(self):
+        wb = openpyxl.Workbook()
+        list = wb.active
+        list.append(('Дата', 'Время', 'Пациент', 'Врач', 'Причина обращения', 'Цена', 'Примечание'))
+        notes = get_without_failing(History, History.id)
+        for i in notes:
+            patient = Patient.get(Patient.id == i.Patient_id)
+            doctor = Doctor.get(Doctor.id == i.Doctor_id)
+            list.append((
+                        i.datetime.split()[0], i.datetime.split()[1], patient.current_name, doctor.current_name, i.name,
+                        i.amount, i.note))
+        wb.save('products.xlsx')
