@@ -17,9 +17,9 @@
    <widget class="QListWidget" name="list_widget">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>30</y>
-      <width>591</width>
+      <x>10</x>
+      <y>10</y>
+      <width>731</width>
       <height>411</height>
      </rect>
     </property>
@@ -32,8 +32,8 @@
    <widget class="QPushButton" name="xlsx_push_button">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>460</y>
+      <x>10</x>
+      <y>430</y>
       <width>101</width>
       <height>41</height>
      </rect>
@@ -49,17 +49,6 @@
     </property>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

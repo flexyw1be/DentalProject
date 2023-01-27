@@ -308,6 +308,6 @@ class MainWindow(QMainWindow):
             patient = Patient.get(Patient.id == i.Patient_id)
             doctor = Doctor.get(Doctor.id == i.Doctor_id)
             list.append((
-                        i.datetime.split()[0], i.datetime.split()[1], patient.current_name, doctor.current_name, i.name,
-                        i.amount, i.note))
-        wb.save('products.xlsx')
+                i.datetime.split()[0], i.datetime.split()[1], patient.current_name, doctor.current_name, i.name,
+                i.amount, i.note))
+        wb.save('history.xlsx')

@@ -35,4 +35,4 @@ class Schedule(QMainWindow):
             list.append((
                         i.datetime.split()[0], i.datetime.split()[1], patient.current_name, doctor.current_name, i.name,
                         i.amount, i.note))
-        wb.save('products.xlsx')
+        wb.save('history.xlsx')
