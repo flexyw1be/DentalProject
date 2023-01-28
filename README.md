@@ -8,6 +8,7 @@
 pip install PyQt5
 pip install peewee
 pip install pyqt5-tools
+pip install openpyxl
 ```
 
 
