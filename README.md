@@ -5,6 +5,9 @@
 ![Qt](https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white)
 ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
 
+## Scheme of database
+![](https://github.com/flexyw1be/DentalProject/blob/master/data/database_scheme.png)
+
 ### To use it, install a couple of libraries
 ```
 pip install PyQt5
