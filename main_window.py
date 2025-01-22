@@ -56,6 +56,7 @@ class MainWindow(QMainWindow):
         self.shedule_push_button.setIconSize(QSize(55, 55))
         self.specialist_push_button.clicked.connect(self.show_specialist)
         self.card_push_button.clicked.connect(self.show_card)
+        self.last_name_line_edit.SelectedText = 'привет'
         self.shedule_push_button.clicked.connect(self.show_schedule)
         self.name_label.setText(self.user_name)
 
