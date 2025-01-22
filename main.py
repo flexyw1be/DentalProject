@@ -32,6 +32,10 @@ class Enter(QMainWindow):
                                              "{"
                                              "background-color : lightgrey;"
                                              "}")
+        self.doctor_push_button.setStyleSheet("QPushButton"
+                                              "{"
+                                              "background-color : white;"
+                                              "}")
 
         # объявление переменных
         self.user_names = ADMINS
