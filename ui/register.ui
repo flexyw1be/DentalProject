@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
+    <width>371</width>
     <height>299</height>
    </rect>
   </property>
@@ -21,8 +21,10 @@
        <widget class="QLabel" name="label_3">
         <property name="font">
          <font>
-          <family>Yandex Sans Display Regular</family>
+          <family>Segoe UI Semibold</family>
           <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -40,8 +42,10 @@
        <widget class="QLabel" name="label_2">
         <property name="font">
          <font>
-          <family>Yandex Sans Display Regular</family>
+          <family>Segoe UI Semibold</family>
           <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -53,8 +57,10 @@
        <widget class="QLabel" name="label">
         <property name="font">
          <font>
-          <family>Yandex Sans Display Regular</family>
+          <family>Segoe UI Semibold</family>
           <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -72,10 +78,10 @@
        <widget class="QLabel" name="label_4">
         <property name="font">
          <font>
-          <family>Yandex Sans Display Regular</family>
+          <family>Segoe UI Semibold</family>
           <pointsize>12</pointsize>
-          <weight>50</weight>
-          <bold>false</bold>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -105,8 +111,10 @@
      <widget class="QComboBox" name="position_combo_box">
       <property name="font">
        <font>
-        <family>Yandex Sans Display Thin</family>
+        <family>Segoe UI Semibold</family>
         <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
       </property>
       <item>
@@ -125,8 +133,10 @@
      <widget class="QPushButton" name="register_push_button">
       <property name="font">
        <font>
-        <family>Segoe UI</family>
+        <family>Segoe UI Semibold</family>
         <pointsize>11</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
       </property>
       <property name="text">
@@ -210,17 +220,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>374</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

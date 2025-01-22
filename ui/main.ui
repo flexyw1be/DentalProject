@@ -275,10 +275,10 @@
                 </property>
                 <property name="font">
                  <font>
-                  <family>Segoe UI</family>
+                  <family>Segoe UI Semibold</family>
                   <pointsize>11</pointsize>
-                  <weight>50</weight>
-                  <bold>false</bold>
+                  <weight>75</weight>
+                  <bold>true</bold>
                  </font>
                 </property>
                 <property name="contextMenuPolicy">
@@ -562,8 +562,10 @@ alternate-background-color: rgb(208, 208, 208)</string>
              <widget class="QComboBox" name="doctor_combo_box">
               <property name="font">
                <font>
-                <family>Segoe UI</family>
+                <family>Segoe UI Semibold</family>
                 <pointsize>11</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="editable">

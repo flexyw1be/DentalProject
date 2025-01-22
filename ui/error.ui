@@ -62,8 +62,10 @@
         <widget class="QPushButton" name="accept_push_button">
          <property name="font">
           <font>
-           <family>Segoe UI</family>
+           <family>Segoe UI Semibold</family>
            <pointsize>11</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">

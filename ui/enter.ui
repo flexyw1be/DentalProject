@@ -28,8 +28,10 @@
       <widget class="QPushButton" name="enter_push_button">
        <property name="font">
         <font>
-         <family>Segoe UI</family>
+         <family>Segoe UI Semibold</family>
          <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -56,8 +58,10 @@
         <widget class="QPushButton" name="admin_push_button">
          <property name="font">
           <font>
-           <family>Segoe UI</family>
+           <family>Segoe UI Semibold</family>
            <pointsize>11</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -69,8 +73,10 @@
         <widget class="QPushButton" name="doctor_push_button">
          <property name="font">
           <font>
-           <family>Segoe UI</family>
+           <family>Segoe UI Semibold</family>
            <pointsize>11</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -84,8 +90,10 @@
       <widget class="QPushButton" name="exit_push_button">
        <property name="font">
         <font>
-         <family>Segoe UI</family>
+         <family>Segoe UI Semibold</family>
          <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -99,8 +107,10 @@
         <widget class="QLabel" name="label">
          <property name="font">
           <font>
-           <family>Segoe UI</family>
+           <family>Segoe UI Semibold</family>
            <pointsize>11</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -109,7 +119,15 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="users_combo_box"/>
+        <widget class="QComboBox" name="users_combo_box">
+         <property name="font">
+          <font>
+           <family>Segoe UI Semibold</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -119,8 +137,10 @@
         <widget class="QLabel" name="label_2">
          <property name="font">
           <font>
-           <family>Segoe UI</family>
+           <family>Segoe UI Semibold</family>
            <pointsize>11</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -132,8 +152,10 @@
         <widget class="QLineEdit" name="password_line_edit">
          <property name="font">
           <font>
-           <family>Segoe UI</family>
+           <family>Segoe UI Semibold</family>
            <pointsize>11</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
         </widget>
