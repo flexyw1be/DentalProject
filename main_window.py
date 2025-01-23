@@ -26,6 +26,7 @@ class MainWindow(QMainWindow):
             self.shedule_push_button.hide()
         print(self.user_name)
         if self.permission == DOCTORS:
+            self.label_4.hide()
             self.doctor_combo_box.hide()
         self.setWindowTitle('Главная')
         self.table_widget.cellClicked.connect(self.get_selected_cell_value)
