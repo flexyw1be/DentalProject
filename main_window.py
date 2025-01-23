@@ -224,7 +224,7 @@ class MainWindow(QMainWindow):
             member = Patient.create(last_name=self.last_name_line_edit.text(),
                                     first_name=self.first_name_line_edit.text(),
                                     middle_name=self.middle_name_line_edit.text(), current_name=current_name,
-                                    date=date, start_time=start_time, finish_time=finish_time, number=number)
+                                    start_time=start_time, finish_time=finish_time, number=number)
             member.save()
         member = Patient.get(Patient.current_name == current_name)
         note = Note.create(Patient_id=member.id, Doctor_id=doctor.id, date=date, start_time=start_time,

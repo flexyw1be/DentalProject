@@ -11,6 +11,7 @@ SCHEDULE_UI = 'ui/schedule.ui'
 
 ACCEPT_UI = 'ui/accept.ui'
 
+EDIT_MEDICAL_CARD_UI = 'ui/editMedicalCard.ui'
 ERROR_UI = 'ui/error.ui'
 
 MAIN_UI = 'ui/main.ui'

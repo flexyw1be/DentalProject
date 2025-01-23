@@ -8,7 +8,7 @@ from data.config import *
 from accept import Accept
 from error import Error
 import datetime
-
+from edit_medical_card import Edit
 
 class MedicalCard(QMainWindow):
     def __init__(self, name, date, time, doctor):
@@ -19,10 +19,14 @@ class MedicalCard(QMainWindow):
         self.name = name
         self.doctor = doctor
         member = Patient.get(Patient.current_name == self.name)
+        self.patient_name = f'{member.last_name} {member.first_name} {member.middle_name}'
+        self.patient_date = member.date
+        self.patient_address = member.address
         self.update_list_of_notes(member)
+        self.patient_number = str(member.number)
 
-        self.name_label.setText(f'{member.last_name} {member.first_name} {member.middle_name}')
-        self.date_label.setText(member.date)
+        self.name_label.setText(self.patient_name)
+        self.date_label.setText(self.patient_date)
         self.address_label.setText(member.address)
         self.number_label.setText(str(member.number))
         self.preparations = self.get_preparations()
@@ -48,6 +52,7 @@ class MedicalCard(QMainWindow):
         self.cost = 0
         self.list_of_services = {}
         self.save_push_button.clicked.connect(self.check_note)
+        self.editButton.clicked.connect(self.edit)
 
         self.accept_widget = Accept('')
         self.accept_widget.accept_push_button.clicked.connect(self.ok)
@@ -81,6 +86,10 @@ class MedicalCard(QMainWindow):
 
     def get_history(self):
         pass
+
+    def edit(self):
+        self.card = Edit(self.patient_name, self.patient_date, self.patient_number,self.patient_address)
+        self.card.show()
 
     def get_prices(self):
         self.list_of_amounts.clear()
